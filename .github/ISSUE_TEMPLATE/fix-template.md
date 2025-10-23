@@ -1,7 +1,7 @@
 ---
 name: fix-issue-template.md
 about: issue fix template
-title: ''
+title: '[FIX]'
 labels: fix
 assignees: ''
 
