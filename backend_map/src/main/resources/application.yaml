@@ -20,7 +20,10 @@ spring:
       show_sql: true
       format_sql: true
 
-      # ??? SQL ?? ?? ?, ?? ? ???? ??? (??? ? ??)
     logging:
       level:
         org.hibernate.type.descriptor.sql: trace
+
+tmap:
+  api:
+    key: ${TMAP_API_KEY}
