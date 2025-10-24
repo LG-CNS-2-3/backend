@@ -21,7 +21,7 @@ import com.mini.mini_2.food.repository.FoodRepository;
 import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
 import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
 import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;

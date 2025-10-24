@@ -6,7 +6,7 @@ import com.mini.mini_2.openapi.domain.dto.RestAreaLocationApiResponseDTO;
 import com.mini.mini_2.openapi.service.RestAreaInfoApiService;
 import com.mini.mini_2.openapi.service.RestAreaLocationApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

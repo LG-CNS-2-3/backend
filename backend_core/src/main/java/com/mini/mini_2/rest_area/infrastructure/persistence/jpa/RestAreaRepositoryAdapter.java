@@ -23,7 +23,7 @@ public class RestAreaRepositoryAdapter implements RestAreaRepository {
     @Override public List<RestAreaEntity> findByDirection(String direction) { return jpa.findByDirection(direction); }
     @Override public void deleteById(Integer id) { jpa.deleteById(id); }
 
-    @Override public Optional<RestAreaEntity> findByAddress(String addr) { return jpa.findByAddress(addr); }
+    //@Override public Optional<RestAreaEntity> findByAddress(String addr) { return jpa.findByAddress(addr); }
 
-    @Override public boolean existsById(Integer id) { return jpa.existsById(id); }//
+    //@Override public boolean existsById(Integer id) { return jpa.existsById(id); }//
 }

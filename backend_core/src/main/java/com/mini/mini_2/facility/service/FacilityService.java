@@ -12,9 +12,9 @@ import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
 import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
 import com.mini.mini_2.facility.domain.entity.FacilityEntity;
 import com.mini.mini_2.facility.repository.FacilityRepository;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 
 import jakarta.transaction.Transactional;
 
