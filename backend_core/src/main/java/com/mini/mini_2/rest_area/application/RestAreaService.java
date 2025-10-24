@@ -1,4 +1,4 @@
-package com.mini.mini_2.rest_area.service;
+package com.mini.mini_2.rest_area.application;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 
 
 
@@ -113,7 +113,7 @@ public class RestAreaService {
         RestAreaEntity entity = restRepository.findById(restAreaId)
                 .orElseThrow(() -> new RuntimeException("휴게소가 존재하지 않습니다. ID: " + restAreaId));
 
-        restRepository.delete(entity);
+        restRepository.deleteById(restAreaId);
 
         return true;
     }
