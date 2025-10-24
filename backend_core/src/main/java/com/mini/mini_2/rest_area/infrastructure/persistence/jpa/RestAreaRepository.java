@@ -1,4 +1,4 @@
-package com.mini.mini_2.rest_area.repository;
+package com.mini.mini_2.rest_area.infrastructure.persistence.jpa;
 
 import java.util.List;
 import java.util.Optional;

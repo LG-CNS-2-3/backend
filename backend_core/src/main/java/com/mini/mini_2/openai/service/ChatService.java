@@ -16,7 +16,7 @@ import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.openai.domain.dto.ChatRequestDTO;
 import com.mini.mini_2.openai.domain.dto.ChatResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

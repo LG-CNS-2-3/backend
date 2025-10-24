@@ -19,7 +19,7 @@ import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.food.repository.FoodRepository;
 import com.mini.mini_2.food.service.FoodService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
 
 @SpringBootTest
 @Transactional

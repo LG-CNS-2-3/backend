@@ -1,11 +1,11 @@
-package com.mini.mini_2.rest_area.ctrl;
+package com.mini.mini_2.rest_area.presentation.http;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
-import com.mini.mini_2.rest_area.service.RestAreaService;
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.RestAreaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

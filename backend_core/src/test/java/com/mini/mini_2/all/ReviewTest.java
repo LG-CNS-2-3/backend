@@ -15,7 +15,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
 import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
 import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;

@@ -4,7 +4,7 @@ import com.mini.mini_2.auth.AuthInterceptor;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiResponseDTO;
 import com.mini.mini_2.openapi.service.FacilityApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
 import com.mini.mini_2.facility.domain.entity.FacilityEntity;
 import com.mini.mini_2.facility.repository.FacilityRepository;
 import org.junit.jupiter.api.BeforeEach;

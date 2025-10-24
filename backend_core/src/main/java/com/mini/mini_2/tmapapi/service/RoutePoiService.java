@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
-import com.mini.mini_2.rest_area.service.RestAreaService;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.RestAreaService;
 import com.mini.mini_2.tmapapi.domain.dto.RoutePoiRequestDTO;
 import com.mini.mini_2.tmapapi.domain.dto.RoutePoiResponseDTO;
 import com.mini.mini_2.tmapapi.domain.dto.RoutePoiResponseDTO.Poi;

@@ -4,7 +4,7 @@ import com.mini.mini_2.auth.AuthInterceptor;
 import com.mini.mini_2.openapi.domain.dto.FoodApiResponseDTO;
 import com.mini.mini_2.openapi.service.FoodApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.food.repository.FoodRepository;
 import org.junit.jupiter.api.BeforeEach;
