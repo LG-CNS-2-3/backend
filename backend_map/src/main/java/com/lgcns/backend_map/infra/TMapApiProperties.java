@@ -10,5 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tmap.api")
 public class TMapApiProperties{
+    private String url;
     private String key;
 }

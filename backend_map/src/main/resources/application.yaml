@@ -26,4 +26,5 @@ spring:
 
 tmap:
   api:
+    url: https://apis.openapi.sk.com
     key: ${TMAP_API_KEY}
