@@ -7,6 +7,8 @@ import com.lgcns.backend_map.application.spi.RouteSearchApi;
 import com.lgcns.backend_map.core.exception.ExternalServiceUnavailableException;
 import com.lgcns.backend_map.domain.Coordinate;
 import com.lgcns.backend_map.domain.Feature;
+import com.lgcns.backend_map.domain.LineString;
+import com.lgcns.backend_map.domain.Point;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -55,31 +57,24 @@ public class TMapRouteSearchApi implements RouteSearchApi {
                 String type = geometryNode.get("type").asText();
 
                 JsonNode coordinateArrayNode = geometryNode.get("coordinates");
-                List<Coordinate> coordinates = new ArrayList<>();
 
                 if(type.equals("Point")){
                     Double xCoord = coordinateArrayNode.get(0).asDouble();
                     Double yCoord = coordinateArrayNode.get(1).asDouble();
 
-                    coordinates.add(Coordinate.builder().xCoord(xCoord).yCoord(yCoord).build());
+                    Coordinate coord = new Coordinate(xCoord, yCoord);
+                    features.add(new Point(coord));
                 }else{
-                    for(JsonNode coordinateNode : coordinateArrayNode) {
-                        if(coordinateNode.isArray()){
-                            Double xCoord = coordinateNode.get(0).asDouble();
-                            Double yCoord = coordinateNode.get(1).asDouble();
+                    Double startXCoord = coordinateArrayNode.get(0).get(0).asDouble();
+                    Double startYCoord = coordinateArrayNode.get(0).get(1).asDouble();
+                    Coordinate startCoord = new Coordinate(startXCoord, startYCoord);
 
-                            coordinates.add(
-                                    Coordinate.builder()
-                                            .xCoord(xCoord)
-                                            .yCoord(yCoord).build()
-                            );
-                        }
-                    }
+                    Double endXCoord = coordinateArrayNode.get(1).get(0).asDouble();
+                    Double endYCoord = coordinateArrayNode.get(1).get(1).asDouble();
+                    Coordinate endCoord = new Coordinate(endXCoord, endYCoord);
+
+                    features.add(new LineString(startCoord, endCoord));
                 }
-                features.add(Feature.builder()
-                        .type(type)
-                        .coordinates(coordinates)
-                        .build());
             }
             return features;
         }catch(JsonProcessingException e){

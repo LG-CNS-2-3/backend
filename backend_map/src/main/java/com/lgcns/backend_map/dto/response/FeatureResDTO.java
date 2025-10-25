@@ -1,8 +1,10 @@
 package com.lgcns.backend_map.dto.response;
 
 import com.lgcns.backend_map.domain.Feature;
+import com.lgcns.backend_map.domain.Point;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record FeatureResDTO(

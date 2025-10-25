@@ -19,7 +19,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class TMapPlaceSearchApi implements PlaceSearchApi {
-    private static final String TMAP_URL = "https://apis.openapi.sk.com";
     private static final String POI_SEARCH_PATH = "/tmap/pois";
 
     private final TMapApiProperties tMapApiProperties;
@@ -27,7 +26,7 @@ public class TMapPlaceSearchApi implements PlaceSearchApi {
 
     @Override
     public List<Place> searchPoi(String query) {
-        RestClient restClient = RestClient.builder().baseUrl(TMAP_URL).build();
+        RestClient restClient = RestClient.builder().baseUrl(tMapApiProperties.getUrl()).build();
 
         String jsonString = restClient.get()
                 .uri(uriBuilder -> uriBuilder.path(POI_SEARCH_PATH)
