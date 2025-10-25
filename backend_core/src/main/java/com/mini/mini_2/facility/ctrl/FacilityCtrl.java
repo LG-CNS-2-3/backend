@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
 import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
 import com.mini.mini_2.facility.service.FacilityService;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

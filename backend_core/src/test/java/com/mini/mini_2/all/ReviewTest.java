@@ -24,6 +24,8 @@ import com.mini.mini_2.review.service.ReviewService;
 import com.mini.mini_2.user.domain.entity.UserEntity;
 import com.mini.mini_2.user.repository.UserRepository;
 
+import org.springframework.test.context.ActiveProfiles;
+@ActiveProfiles("test")
 
 @SpringBootTest
 @Transactional

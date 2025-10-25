@@ -21,6 +21,9 @@ import com.mini.mini_2.food.service.FoodService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 
+
+import org.springframework.test.context.ActiveProfiles;
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 public class FoodTest {

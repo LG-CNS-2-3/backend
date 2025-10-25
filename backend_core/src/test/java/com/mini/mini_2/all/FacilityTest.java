@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
+
 
 import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
 import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
@@ -24,11 +26,15 @@ import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.rest_area.application.RestAreaService;
 
 
+@ActiveProfiles("test")
 
 @SpringBootTest
 @Transactional
 @Rollback
 public class FacilityTest {
+
+
+
 
     @Autowired 
     RestAreaRepository  restAreaRepository;

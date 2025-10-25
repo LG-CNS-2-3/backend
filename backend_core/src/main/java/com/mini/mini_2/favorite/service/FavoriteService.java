@@ -11,7 +11,7 @@ import com.mini.mini_2.favorite.domain.dto.FavoriteResponseDTO;
 import com.mini.mini_2.favorite.domain.entity.FavoriteEntity;
 import com.mini.mini_2.favorite.repository.FavoriteRepository;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.infrastructure.persistence.jpa.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.user.domain.entity.UserEntity;
 import com.mini.mini_2.user.repository.UserRepository;
 

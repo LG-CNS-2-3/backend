@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
 import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
