@@ -3,8 +3,8 @@ package com.mini.mini_2.openapi.ctrl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
-import com.mini.mini_2.facility.service.FacilityService;
+import com.mini.mini_2.facility.application.dto.FacilityRequestDTO;
+import com.mini.mini_2.facility.application.FacilityService;
 import com.mini.mini_2.food.application.FoodService;
 import com.mini.mini_2.food.application.dto.FoodRequestDTO;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiRequestDTO;

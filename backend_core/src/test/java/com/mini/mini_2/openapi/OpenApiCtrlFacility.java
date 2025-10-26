@@ -6,7 +6,7 @@ import com.mini.mini_2.openapi.service.FacilityApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.facility.domain.entity.FacilityEntity;
-import com.mini.mini_2.facility.repository.FacilityRepository;
+import com.mini.mini_2.facility.domain.FacilityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

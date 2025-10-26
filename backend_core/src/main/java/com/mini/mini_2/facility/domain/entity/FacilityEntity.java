@@ -20,7 +20,6 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "facility")
-
 @Builder
 @Setter
 @Getter

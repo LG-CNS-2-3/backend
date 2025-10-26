@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.test.context.ActiveProfiles;
 
 
-import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
-import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
-import com.mini.mini_2.facility.service.FacilityService;
+import com.mini.mini_2.facility.application.dto.FacilityRequestDTO;
+import com.mini.mini_2.facility.application.dto.FacilityResponseDTO;
+import com.mini.mini_2.facility.application.FacilityService;
 import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
 import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;

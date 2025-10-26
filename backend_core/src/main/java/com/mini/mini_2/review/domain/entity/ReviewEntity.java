@@ -32,7 +32,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"restArea"})
+@ToString(exclude = {"restArea", "user"}) // [수정] user도 exclude
 public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
