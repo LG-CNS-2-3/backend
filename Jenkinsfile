@@ -6,9 +6,6 @@ pipeline {
         jdk 'openJDK17'
     }
 
-    environment{
-    }
-
     stages{
         stage('Checkout') {
             steps {
