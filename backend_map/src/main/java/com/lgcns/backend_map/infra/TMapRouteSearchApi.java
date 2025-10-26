@@ -7,6 +7,8 @@ import com.lgcns.backend_map.application.spi.RouteSearchApi;
 import com.lgcns.backend_map.core.exception.ExternalServiceUnavailableException;
 import com.lgcns.backend_map.domain.Coordinate;
 import com.lgcns.backend_map.domain.Feature;
+import com.lgcns.backend_map.domain.LineString;
+import com.lgcns.backend_map.domain.Point;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,24 +30,32 @@ public class TMapRouteSearchApi implements RouteSearchApi {
     public List<Feature> searchRoute(Double startX, Double startY, Double endX, Double endY) {
         RestClient client = RestClient.builder().baseUrl(tMapApiProperties.getUrl()).build();
 
-        String jsonString = client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(TMAP_ROUTE_PATH)
-                        .queryParam("version", 1)
-                        .queryParam("appKey", tMapApiProperties.getKey())
-                        .queryParam("startX", startX)
-                        .queryParam("startY", startY)
-                        .queryParam("endX", endX)
-                        .queryParam("endY", endY)
-                        .build())
-                .retrieve()
-                .body(String.class);
+        String jsonString;
+        try{
+            jsonString = client.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(TMAP_ROUTE_PATH)
+                            .queryParam("version", 1)
+                            .queryParam("appKey", tMapApiProperties.getKey())
+                            .queryParam("startX", startX)
+                            .queryParam("startY", startY)
+                            .queryParam("endX", endX)
+                            .queryParam("endY", endY)
+                            .build())
+                    .retrieve()
+                    .body(String.class);
+        }catch(Exception e){
+            log.error("TMap 경로 검색 API 오류 발생");
+            throw new ExternalServiceUnavailableException();
+        }
 
         return parseJsonString(jsonString);
     }
 
     private List<Feature> parseJsonString(String jsonString){
         try{
+            if(jsonString == null || jsonString.isEmpty()) return List.of();
+
             JsonNode featureArrayNode = objectMapper.readTree(jsonString).get("features");
             List<Feature> features = new ArrayList<>();
 
@@ -55,31 +65,25 @@ public class TMapRouteSearchApi implements RouteSearchApi {
                 String type = geometryNode.get("type").asText();
 
                 JsonNode coordinateArrayNode = geometryNode.get("coordinates");
-                List<Coordinate> coordinates = new ArrayList<>();
 
                 if(type.equals("Point")){
                     Double xCoord = coordinateArrayNode.get(0).asDouble();
                     Double yCoord = coordinateArrayNode.get(1).asDouble();
 
-                    coordinates.add(Coordinate.builder().xCoord(xCoord).yCoord(yCoord).build());
+                    Coordinate coord = new Coordinate(xCoord, yCoord);
+                    features.add(new Point(coord));
                 }else{
-                    for(JsonNode coordinateNode : coordinateArrayNode) {
-                        if(coordinateNode.isArray()){
-                            Double xCoord = coordinateNode.get(0).asDouble();
-                            Double yCoord = coordinateNode.get(1).asDouble();
+                    List<Coordinate> coordinates = new ArrayList<>();
 
-                            coordinates.add(
-                                    Coordinate.builder()
-                                            .xCoord(xCoord)
-                                            .yCoord(yCoord).build()
-                            );
-                        }
+                    for(JsonNode coordinateNode:  coordinateArrayNode){
+                        Double xCoord = coordinateNode.get(0).asDouble();
+                        Double yCoord = coordinateNode.get(1).asDouble();
+
+                        coordinates.add(new Coordinate(xCoord, yCoord));
                     }
+
+                    features.add(new LineString(coordinates));
                 }
-                features.add(Feature.builder()
-                        .type(type)
-                        .coordinates(coordinates)
-                        .build());
             }
             return features;
         }catch(JsonProcessingException e){

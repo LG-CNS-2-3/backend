@@ -24,6 +24,17 @@ spring:
       level:
         org.hibernate.type.descriptor.sql: trace
 
+#  http:
+#    codecs:
+#      log-request-details: true
+#
+## HTTP 요청/응답 로그 활성화
+#logging:
+#  level:
+#    org.springframework.web.client.RestClient: DEBUG
+#    org.springframework.http.client: DEBUG
+#    org.springframework.web: DEBUG
+
 tmap:
   api:
     url: https://apis.openapi.sk.com

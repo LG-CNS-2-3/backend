@@ -1,25 +1,29 @@
 package com.lgcns.backend_map.application;
 
 import com.lgcns.backend_map.application.spi.PlaceSearchApi;
+import com.lgcns.backend_map.application.spi.RouteRestAreaSearchApi;
 import com.lgcns.backend_map.application.spi.RouteSearchApi;
+import com.lgcns.backend_map.domain.Coordinate;
 import com.lgcns.backend_map.domain.Feature;
 import com.lgcns.backend_map.domain.Place;
 
+import com.lgcns.backend_map.dto.request.RestAreaSearchReqDTO;
 import com.lgcns.backend_map.dto.request.RouteSearchReqDTO;
-import com.lgcns.backend_map.dto.response.FeatureResDTO;
-import com.lgcns.backend_map.dto.response.PlaceResDTO;
-import com.lgcns.backend_map.dto.response.PlaceSearchResDTO;
-import com.lgcns.backend_map.dto.response.RouteSearchResDTO;
+import com.lgcns.backend_map.dto.response.*;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.webmvc.core.service.RequestService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MapService {
     private final PlaceSearchApi placeSearchApi;
     private final RouteSearchApi routeSearchApi;
+    private final RouteRestAreaSearchApi routeRestAreaSearchApi;
+    private final RequestService requestService;
 
     public PlaceSearchResDTO searchPlace(String query){
         List<Place> places = placeSearchApi.searchPoi(query);
@@ -37,5 +41,21 @@ public class MapService {
                         .map(
                              FeatureResDTO::from)
                         .toList());
+    }
+
+    public RestAreaSearchResDTO searchRestArea(RestAreaSearchReqDTO reqDTO){
+        List<Place> places = routeRestAreaSearchApi.searchRestAreaOnRoute(
+                reqDTO.startX(),
+                reqDTO.startY(),
+                reqDTO.endX(),
+                reqDTO.endY(),
+                reqDTO.userX(),
+                reqDTO.userY(),
+                reqDTO.radius(),
+                reqDTO.lineString()
+        );
+
+        return RestAreaSearchResDTO.of(
+                places.stream().map(PlaceResDTO::from).toList());
     }
 }
