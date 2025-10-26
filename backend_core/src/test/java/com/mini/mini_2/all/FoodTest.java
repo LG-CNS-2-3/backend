@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mini.mini_2.food.domain.dto.FoodRequestDTO;
-import com.mini.mini_2.food.domain.dto.FoodResponseDTO;
+import com.mini.mini_2.food.application.FoodService;
+import com.mini.mini_2.food.application.dto.FoodRequestDTO;
+import com.mini.mini_2.food.application.dto.FoodResponseDTO;
+import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
-import com.mini.mini_2.food.repository.FoodRepository;
-import com.mini.mini_2.food.service.FoodService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 

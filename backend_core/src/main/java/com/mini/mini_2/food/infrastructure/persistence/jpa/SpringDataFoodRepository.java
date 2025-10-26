@@ -1,13 +1,24 @@
-package com.mini.mini_2.food.infrastructure.persistence.jpa; // [수정] 패키지 변경
+package com.mini.mini_2.food.infrastructure.persistence.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.stereotype.Repository; // [수정] @Repository 어노테이션은 Adapter로 이동
+import org.springframework.data.jpa.repository.Query; // [추가]
+import org.springframework.data.repository.query.Param; // [추가]
 
-import com.mini.mini_2.food.domain.entity.FoodEntity; // [수정] Entity 임포트 경로 변경
+import com.mini.mini_2.food.domain.entity.FoodEntity;
 
-// [수정] 기존 FoodRepository -> SpringDataFoodRepository로 이름 변경
+import java.util.List; // [추가]
+
 public interface SpringDataFoodRepository extends JpaRepository<FoodEntity, Integer> {
-    
-    // 서비스 계층이 모두 findAll()을 기반으로 동작하므로
-    // 별도의 쿼리 메서드가 필요하지 않습니다. (기존 로직 유지)
+
+    // [수정] searchByName을 위한 쿼리 메서드
+    List<FoodEntity> findByFoodNameContaining(String keyword);
+
+    // [수정] searchByRestAreaId을 위한 쿼리 메서드
+    // (RestAreaEntity의 restAreaId 필드와 isSignature 필드를 AND 조건으로 검색)
+    List<FoodEntity> findByRestArea_RestAreaIdAndIsSignature(Integer restAreaId, String isSignature);
+
+    // [수정] searchByPrice를 위한 쿼리 메서드
+    // (price 필드가 String이므로, DB에서 double로 형변환하여 비교)
+    @Query("SELECT f FROM FoodEntity f WHERE CAST(f.price AS double) <= :maxPrice")
+    List<FoodEntity> findByPriceLessThanEqual(@Param("maxPrice") double maxPrice);
 }

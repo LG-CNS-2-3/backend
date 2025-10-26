@@ -5,8 +5,9 @@ import com.mini.mini_2.openapi.domain.dto.FoodApiResponseDTO;
 import com.mini.mini_2.openapi.service.FoodApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
-import com.mini.mini_2.food.repository.FoodRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,35 +1,31 @@
-package com.mini.mini_2.food.application; // [수정] 패키지 변경
+package com.mini.mini_2.food.application;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// [수정] DTO 임포트 경로 변경
 import com.mini.mini_2.food.application.dto.FoodRequestDTO;
 import com.mini.mini_2.food.application.dto.FoodResponseDTO;
-// [수정] Entity 임포트 경로 변경
+import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
-// [핵심 수정] Infrastructure의 JPA 인터페이스가 아닌 Domain의 Repository 인터페이스를 임포트
-import com.mini.mini_2.food.domain.FoodRepository; 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+
+
 
 @Service
 public class FoodService {
 
     @Autowired
-    private FoodRepository foodRepository; // [수정] 이제 이 인터페이스는 Domain 계층의 것임
+    private FoodRepository foodRepository;
 
     @Autowired
     private RestAreaRepository restAreaRepository;
 
-    // (내부 로직은 기존과 동일)
-    
     // 음식 생성
     public FoodResponseDTO create(FoodRequestDTO request) {
         System.out.println("[FoodService] create : " + request); 
@@ -50,15 +46,72 @@ public class FoodService {
                 .map(FoodResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
-    
-    // ... (이하 모든 서비스 메서드 로직 동일) ...
-    
-    // 가격 필터를 통한 음식 조회
+
+    // 일부 조회
+    public FoodResponseDTO findByFoodId(Integer foodId) {
+        return foodRepository.findById(foodId)
+                .map(FoodResponseDTO::fromEntity)
+                .orElse(null);
+    }
+
+    // 메뉴 수정
+    public FoodResponseDTO update(Integer foodId, FoodRequestDTO request) {
+
+        Optional<FoodEntity> foodEntity = foodRepository.findById(foodId);
+
+        // RestAreaEntity fixedRestArea = existing.getRestArea();
+
+        FoodEntity entity = foodEntity.get();
+        entity.setFoodName(request.getFoodName());
+        entity.setIsSignature(request.getIsSignature());
+        entity.setPrice(request.getPrice());
+        entity.setDescription(request.getDescription());
+
+        FoodEntity saved = foodRepository.save(entity);
+
+        return FoodResponseDTO.fromEntity(saved);
+    }
+
+    // 메뉴 삭제
+    public boolean delete(Integer foodId) {
+
+        FoodEntity entity = foodRepository.findById(foodId)
+                .orElseThrow(() -> new RuntimeException("음식이 존재하지 않습니다. ID: " + foodId));
+
+        foodRepository.delete(entity);
+
+        return true;
+    }
+
+    // [수정] 메뉴 필터를 통한 음식 조회 (DB에서 직접 필터링)
+    public List<FoodResponseDTO> searchByName(String keyword) {
+        // [수정] findAll() 대신 쿼리 메서드 사용
+        List<FoodEntity> entities = foodRepository.findByFoodNameContaining(keyword);
+
+        return entities.stream()
+                .map(FoodResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // [수정] 대표 메뉴 필터를 통한 음식 조회 (DB에서 직접 필터링)
+    public List<FoodResponseDTO> searchByRestAreaId(Integer restAreaId) {
+        // [수정] findAll() 대신 쿼리 메서드 사용 (시그니처 "Y"를 인자로 전달)
+        List<FoodEntity> entities = foodRepository.findByRestAreaIdAndIsSignature(restAreaId, "Y");
+
+        return entities.stream()
+                .map(FoodResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // [수정] 가격 필터를 통한 음식 조회 (DB에서 직접 필터링)
     public List<FoodResponseDTO> searchByPrice(double maxPrice) {
-        return foodRepository.findAll().stream()
-                .filter(f -> {double price = Double.parseDouble(f.getPrice());
-                    return price <= maxPrice;})
+        // [수정] findAll() 대신 쿼리 메서드 사용
+        List<FoodEntity> entities = foodRepository.findByPriceLessThanEqual(maxPrice);
+
+        return entities.stream()
                 .map(FoodResponseDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 }
+
+

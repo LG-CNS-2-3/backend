@@ -10,10 +10,6 @@ import com.mini.mini_2.food.domain.entity.FoodEntity;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * 도메인 리포지토리 인터페이스(FoodRepository)의
- * Spring Data JPA 구현체(어댑터)
- */
 @Repository
 @RequiredArgsConstructor
 public class FoodRepositoryAdapter implements FoodRepository {
@@ -38,5 +34,21 @@ public class FoodRepositoryAdapter implements FoodRepository {
     @Override
     public void delete(FoodEntity e) {
         jpa.delete(e);
+    }
+
+    // [수정] 추가된 3개 메서드 구현
+    @Override
+    public List<FoodEntity> findByFoodNameContaining(String keyword) {
+        return jpa.findByFoodNameContaining(keyword);
+    }
+
+    @Override
+    public List<FoodEntity> findByRestAreaIdAndIsSignature(Integer restAreaId, String isSignature) {
+        return jpa.findByRestArea_RestAreaIdAndIsSignature(restAreaId, isSignature);
+    }
+
+    @Override
+    public List<FoodEntity> findByPriceLessThanEqual(double maxPrice) {
+        return jpa.findByPriceLessThanEqual(maxPrice);
     }
 }
