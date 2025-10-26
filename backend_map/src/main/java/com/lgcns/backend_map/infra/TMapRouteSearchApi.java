@@ -30,18 +30,24 @@ public class TMapRouteSearchApi implements RouteSearchApi {
     public List<Feature> searchRoute(Double startX, Double startY, Double endX, Double endY) {
         RestClient client = RestClient.builder().baseUrl(tMapApiProperties.getUrl()).build();
 
-        String jsonString = client.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(TMAP_ROUTE_PATH)
-                        .queryParam("version", 1)
-                        .queryParam("appKey", tMapApiProperties.getKey())
-                        .queryParam("startX", startX)
-                        .queryParam("startY", startY)
-                        .queryParam("endX", endX)
-                        .queryParam("endY", endY)
-                        .build())
-                .retrieve()
-                .body(String.class);
+        String jsonString;
+        try{
+            jsonString = client.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(TMAP_ROUTE_PATH)
+                            .queryParam("version", 1)
+                            .queryParam("appKey", tMapApiProperties.getKey())
+                            .queryParam("startX", startX)
+                            .queryParam("startY", startY)
+                            .queryParam("endX", endX)
+                            .queryParam("endY", endY)
+                            .build())
+                    .retrieve()
+                    .body(String.class);
+        }catch(Exception e){
+            log.error("TMap 경로 검색 API 오류 발생");
+            throw new ExternalServiceUnavailableException();
+        }
 
         return parseJsonString(jsonString);
     }

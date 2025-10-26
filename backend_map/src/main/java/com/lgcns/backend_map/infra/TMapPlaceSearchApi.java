@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +29,22 @@ public class TMapPlaceSearchApi implements PlaceSearchApi {
     public List<Place> searchPoi(String query) {
         RestClient restClient = RestClient.builder().baseUrl(tMapApiProperties.getUrl()).build();
 
-        String jsonString = restClient.get()
-                .uri(uriBuilder -> uriBuilder.path(POI_SEARCH_PATH)
-                        .queryParam("version", 1)
-                        .queryParam("searchKeyword", query)
-                        .queryParam("appKey", tMapApiProperties.getKey())
-                        .queryParam("count", 5)
-                        .build()
-                )
-                .retrieve()
-                .body(String.class);
+        String jsonString;
+        try{
+            jsonString = restClient.get()
+                    .uri(uriBuilder -> uriBuilder.path(POI_SEARCH_PATH)
+                            .queryParam("version", 1)
+                            .queryParam("searchKeyword", query)
+                            .queryParam("appKey", tMapApiProperties.getKey())
+                            .queryParam("count", 5)
+                            .build()
+                    )
+                    .retrieve()
+                    .body(String.class);
+        }catch (Exception e){
+            log.error("TMap 장소 검색 API 오류 발생");
+            throw new ExternalServiceUnavailableException();
+        }
 
         PlaceSearchApiResponse apiResponse = parseJsonString(jsonString);
 

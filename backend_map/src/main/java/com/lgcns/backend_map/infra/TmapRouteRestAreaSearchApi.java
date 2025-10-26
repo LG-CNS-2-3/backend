@@ -7,6 +7,7 @@ import com.lgcns.backend_map.application.spi.RouteRestAreaSearchApi;
 import com.lgcns.backend_map.core.exception.ExternalServiceUnavailableException;
 import com.lgcns.backend_map.domain.Place;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TmapRouteRestAreaSearchApi implements RouteRestAreaSearchApi {
@@ -42,14 +44,20 @@ public class TmapRouteRestAreaSearchApi implements RouteRestAreaSearchApi {
                 .defaultHeader("appKey", tMapApiProperties.getKey())
                 .build();
 
-        String jsonString = restClient.post()
-                .uri(uriBuilder -> uriBuilder.path(POI_ROUTE_SEARCH_PATH)
-                        .queryParam("version", "1.0")
-                        .build())
-                .contentType(MediaType.valueOf("application/json; charset=UTF-8"))
-                .body(buildPayLoad(startX, startY, endX, endY, userX, userY, radius, lineString))
-                .retrieve()
-                .body(String.class);
+        String jsonString;
+        try{
+            jsonString = restClient.post()
+                    .uri(uriBuilder -> uriBuilder.path(POI_ROUTE_SEARCH_PATH)
+                            .queryParam("version", "1.0")
+                            .build())
+                    .contentType(MediaType.valueOf("application/json; charset=UTF-8"))
+                    .body(buildPayLoad(startX, startY, endX, endY, userX, userY, radius, lineString))
+                    .retrieve()
+                    .body(String.class);
+        }catch(Exception e){
+            log.error("TMAP 경로 반경 검색 API 오류 발생");
+            throw new ExternalServiceUnavailableException();
+        }
 
         return parseJsonString(jsonString);
     }
@@ -99,6 +107,7 @@ public class TmapRouteRestAreaSearchApi implements RouteRestAreaSearchApi {
 
             return places;
         }catch(JsonProcessingException e){
+            log.error("TMAP 경로 반경 검색 API 오류 발생");
             throw new ExternalServiceUnavailableException();
         }
     }
