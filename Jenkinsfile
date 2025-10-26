@@ -28,7 +28,7 @@ pipeline {
         stage('backend-map Pipeline'){
             when {
                 anyOf{
-                    changeset "backend-map/**"
+                    changeset "backend_map/**"
                     branch 'develop'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
                 stage('map: Build'){
                     steps{
                         echo "==================== Building backend-map ===================="
-                        dir('backend-map'){
+                        dir('backend_map'){
                             sh '''
                                 chmod +x gradlew
                                 ./gradlew build -x test
@@ -47,15 +47,15 @@ pipeline {
                 }
                 stage('map: Test'){
                     steps{
-                        echo "==================== Testing backend-map ===================="
-                        dir('backend-map'){
+                        echo "==================== Testing backend_map ===================="
+                        dir('backend_map'){
                             sh './gradlew test --no-daemon'
                         }
                     }
                 }
                 stage('map: Docker Build and Push'){
                     steps{
-                        echo "==================== Building & Pushing Docker Image(backend-map) ===================="
+                        echo "==================== Building & Pushing Docker Image(backend_map) ===================="
 
                         script{
                             withCredentials([usernamePassword(
