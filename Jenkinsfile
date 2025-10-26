@@ -20,7 +20,7 @@ pipeline {
                 sh '''
                     echo "현재 위치: $(pwd)"
                     ls -al
-                    ls -al backend-map || echo "backend-map 폴더가 없습니다."
+                    ls -al backend_map || echo "backend-map 폴더가 없습니다."
                 '''
             }
         }
