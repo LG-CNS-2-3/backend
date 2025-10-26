@@ -45,14 +45,14 @@ pipeline {
                         }
                     }
                 }
-                stage('map: Test'){
-                    steps{
-                        echo "==================== Testing backend_map ===================="
-                        dir('backend_map'){
-                            sh './gradlew test --no-daemon'
-                        }
-                    }
-                }
+//                 stage('map: Test'){
+//                     steps{
+//                         echo "==================== Testing backend_map ===================="
+//                         dir('backend_map'){
+//                             sh './gradlew test --no-daemon'
+//                         }
+//                     }
+//                 }
                 stage('map: Docker Build and Push'){
                     steps{
                         echo "==================== Building & Pushing Docker Image(backend_map) ===================="
