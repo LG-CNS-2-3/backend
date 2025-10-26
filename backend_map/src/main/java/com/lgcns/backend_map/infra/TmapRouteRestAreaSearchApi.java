@@ -1,12 +1,17 @@
 package com.lgcns.backend_map.infra;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lgcns.backend_map.application.spi.RouteRestAreaSearchApi;
-import com.lgcns.backend_map.domain.LineString;
+import com.lgcns.backend_map.core.exception.ExternalServiceUnavailableException;
+import com.lgcns.backend_map.domain.Place;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,50 +20,86 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TmapRouteRestAreaSearchApi implements RouteRestAreaSearchApi {
     private static final String POI_ROUTE_SEARCH_PATH = "/tmap/poi/findPoiRoute";
-    private static final String SEARCH_TYPE_VALUE = "CATEGORY";
+    private static final String SEARCH_TYPE_VALUE = "category";
     private static final String SEARCH_CATEGORY_VALUE = "C01";
 
+    private final ObjectMapper objectMapper;
     private final TMapApiProperties tMapApiProperties;
 
     @Override
-    public void searchRestAreaOnRoute(
+    public List<Place> searchRestAreaOnRoute(
             Double startX,
             Double startY,
             Double endX,
             Double endY,
             Double userX,
             Double userY,
-            List<LineString> lineStrings
+            Integer radius,
+            String lineString
     ) {
-        RestClient restClient = RestClient.builder().baseUrl(tMapApiProperties.getUrl()).build();
-//
-//        restClient.post()
-//                .uri(URI.create(POI_ROUTE_SEARCH_PATH))
-//                .body()
-//                .retrieve()
+        RestClient restClient = RestClient.builder()
+                .baseUrl(tMapApiProperties.getUrl())
+                .defaultHeader("appKey", tMapApiProperties.getKey())
+                .build();
+
+        String jsonString = restClient.post()
+                .uri(uriBuilder -> uriBuilder.path(POI_ROUTE_SEARCH_PATH)
+                        .queryParam("version", "1.0")
+                        .build())
+                .contentType(MediaType.valueOf("application/json; charset=UTF-8"))
+                .body(buildPayLoad(startX, startY, endX, endY, userX, userY, radius, lineString))
+                .retrieve()
+                .body(String.class);
+
+        return parseJsonString(jsonString);
     }
 
-    private Map<String, Object> buildPayLoad(
+    private Map<String, String> buildPayLoad(
             Double startX,
             Double startY,
             Double endX,
             Double endY,
             Double userX,
             Double userY,
-            List<LineString> lineStrings
+            Integer radius,
+            String lineString
     ){
-        Map<String, Object> body = new HashMap<>();
+        Map<String, String> body = new HashMap<>();
 
-        body.put("startX", startX);
-        body.put("startY", startY);
-        body.put("endX", endX);
-        body.put("endY", endY);
-        body.put("userX", userX);
-        body.put("userY", userY);
+        body.put("startX", String.valueOf(startX));
+        body.put("startY", String.valueOf(startY));
+        body.put("endX", String.valueOf(endX));
+        body.put("endY", String.valueOf(endY));
+        body.put("userX", String.valueOf(userX));
+        body.put("userY", String.valueOf(userY));
+        body.put("radius", String.valueOf(radius));
         body.put("searchType", SEARCH_TYPE_VALUE);
         body.put("searchCategory", SEARCH_CATEGORY_VALUE);
-        body.put("lineStrings", 0);
+        body.put("lineString", lineString);
 
         return body;
+    }
+
+    private List<Place> parseJsonString(String jsonString){
+        try{
+            if(jsonString == null || jsonString.isEmpty()) return List.of();
+
+            JsonNode rootNode = objectMapper.readTree(jsonString);
+            JsonNode poiNodes = rootNode.get("searchPoiInfo").get("pois").get("poi");
+
+            List<Place> places = new ArrayList<>();
+            for(JsonNode poiNode : poiNodes){
+                Double latitude = poiNode.get("centerLat").asDouble();
+                Double longitude = poiNode.get("centerLon").asDouble();
+                String name = poiNode.get("name").asText();
+                String roadNameAddress = poiNode.get("roadName").asText();
+
+                places.add(new Place(name, roadNameAddress, latitude, longitude));
+            }
+
+            return places;
+        }catch(JsonProcessingException e){
+            throw new ExternalServiceUnavailableException();
+        }
     }
 }

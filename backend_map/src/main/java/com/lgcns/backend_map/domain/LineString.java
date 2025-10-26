@@ -8,12 +8,11 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class LineString extends Feature{
-    Coordinate start;
-    Coordinate end;
+    List<Coordinate> coordinates;
 
     @Override
     public List<Coordinate> getCoordinates() {
-        return List.of(start, end);
+        return coordinates;
     }
 
     @Override

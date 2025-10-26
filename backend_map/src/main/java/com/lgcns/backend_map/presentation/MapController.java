@@ -1,8 +1,10 @@
 package com.lgcns.backend_map.presentation;
 
 import com.lgcns.backend_map.application.MapService;
+import com.lgcns.backend_map.dto.request.RestAreaSearchReqDTO;
 import com.lgcns.backend_map.dto.request.RouteSearchReqDTO;
 import com.lgcns.backend_map.dto.response.PlaceSearchResDTO;
+import com.lgcns.backend_map.dto.response.RestAreaSearchResDTO;
 import com.lgcns.backend_map.dto.response.RouteSearchResDTO;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +18,23 @@ import org.springframework.web.bind.annotation.*;
 public class MapController implements MapSwagger {
     private final MapService mapService;
 
-    @GetMapping("/place/search")
+    @GetMapping("/places/search")
     public ResponseEntity<PlaceSearchResDTO> searchPlace(@RequestParam @NotNull String query){
         PlaceSearchResDTO resDTO = mapService.searchPlace(query);
 
         return ResponseEntity.status(HttpStatus.OK).body(resDTO);
     }
 
-    @GetMapping("/route/search")
+    @GetMapping("/routes/search")
     public ResponseEntity<RouteSearchResDTO> searchRoute(@ModelAttribute RouteSearchReqDTO reqDTO){
         RouteSearchResDTO resDTO = mapService.searchRoute(reqDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resDTO);
+    }
+
+    @PostMapping("/routes/places/rest-area/search")
+    public ResponseEntity<RestAreaSearchResDTO> searchRestAreaOnRoute(@RequestBody RestAreaSearchReqDTO reqDTO){
+        RestAreaSearchResDTO resDTO = mapService.searchRestArea(reqDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resDTO);
     }
