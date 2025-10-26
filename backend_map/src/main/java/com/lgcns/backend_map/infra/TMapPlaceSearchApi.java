@@ -46,6 +46,8 @@ public class TMapPlaceSearchApi implements PlaceSearchApi {
 
     private PlaceSearchApiResponse parseJsonString(String jsonString){
         try{
+            if(jsonString == null || jsonString.isEmpty()) return new PlaceSearchApiResponse(List.of());
+
             JsonNode root =  objectMapper.readTree(jsonString);
             JsonNode poiArrayNode = root.get("searchPoiInfo").get("pois").get("poi");
 

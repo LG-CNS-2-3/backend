@@ -48,6 +48,8 @@ public class TMapRouteSearchApi implements RouteSearchApi {
 
     private List<Feature> parseJsonString(String jsonString){
         try{
+            if(jsonString == null || jsonString.isEmpty()) return List.of();
+
             JsonNode featureArrayNode = objectMapper.readTree(jsonString).get("features");
             List<Feature> features = new ArrayList<>();
 
@@ -65,15 +67,16 @@ public class TMapRouteSearchApi implements RouteSearchApi {
                     Coordinate coord = new Coordinate(xCoord, yCoord);
                     features.add(new Point(coord));
                 }else{
-                    Double startXCoord = coordinateArrayNode.get(0).get(0).asDouble();
-                    Double startYCoord = coordinateArrayNode.get(0).get(1).asDouble();
-                    Coordinate startCoord = new Coordinate(startXCoord, startYCoord);
+                    List<Coordinate> coordinates = new ArrayList<>();
 
-                    Double endXCoord = coordinateArrayNode.get(1).get(0).asDouble();
-                    Double endYCoord = coordinateArrayNode.get(1).get(1).asDouble();
-                    Coordinate endCoord = new Coordinate(endXCoord, endYCoord);
+                    for(JsonNode coordinateNode:  coordinateArrayNode){
+                        Double xCoord = coordinateNode.get(0).asDouble();
+                        Double yCoord = coordinateNode.get(1).asDouble();
 
-                    features.add(new LineString(startCoord, endCoord));
+                        coordinates.add(new Coordinate(xCoord, yCoord));
+                    }
+
+                    features.add(new LineString(coordinates));
                 }
             }
             return features;
