@@ -1,4 +1,4 @@
-package com.mini.mini_2.food.domain.entity;
+package com.mini.mini_2.food.domain.entity; // [수정] 패키지 변경 (기존과 동일)
 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 
@@ -29,12 +29,12 @@ import lombok.ToString;
 @ToString(exclude = {"restArea"})
 public class FoodEntity {
     
-    // PK
+    // (내부 로직은 기존과 동일)
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer foodId;
     
-    // FK
     @ManyToOne(fetch = FetchType.LAZY, 
                optional = false)
     @JoinColumn(name = "rest_area_id", 
@@ -53,5 +53,4 @@ public class FoodEntity {
 
     @Column(length = 1000)
     private String description;
-
 }

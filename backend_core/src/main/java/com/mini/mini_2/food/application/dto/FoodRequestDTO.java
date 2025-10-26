@@ -1,6 +1,6 @@
-package com.mini.mini_2.food.domain.dto;
+package com.mini.mini_2.food.application.dto; 
 
-import com.mini.mini_2.food.domain.entity.FoodEntity;
+import com.mini.mini_2.food.domain.entity.FoodEntity; 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 
 import lombok.AllArgsConstructor;
@@ -33,5 +33,4 @@ public class FoodRequestDTO {
                 .description(this.description)
                 .build();
     }
-   
 }

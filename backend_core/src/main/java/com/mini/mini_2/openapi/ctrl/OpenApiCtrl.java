@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
 import com.mini.mini_2.facility.service.FacilityService;
-import com.mini.mini_2.food.domain.dto.FoodRequestDTO;
-import com.mini.mini_2.food.service.FoodService;
+import com.mini.mini_2.food.application.FoodService;
+import com.mini.mini_2.food.application.dto.FoodRequestDTO;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiRequestDTO;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiResponseDTO;
 import com.mini.mini_2.openapi.domain.dto.FoodApiRequestDTO;

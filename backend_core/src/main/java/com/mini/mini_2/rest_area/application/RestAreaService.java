@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+// import org.springframework.transaction.annotation.Transactional; 업데이트 시 @Transactional 사용 가능
 
 import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
 import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
@@ -20,7 +21,7 @@ public class RestAreaService {
     @Autowired
     private RestAreaRepository restRepository;
 
-    // 휴게소 생성
+    // 휴게소 생성 
     public RestAreaResponseDTO create(RestAreaRequestDTO request){ 
         System.out.println("[RestAreaService] create : "+ request); 
         
@@ -46,7 +47,7 @@ public class RestAreaService {
         return RestAreaResponseDTO.fromEntity(entity);
     }
 
-    // 휴게소 전체 조회
+    // 휴게소 전체 조회 
     public List<RestAreaResponseDTO> findAll() {
         System.out.println("[RestAreaService] findAll");
 
@@ -56,7 +57,7 @@ public class RestAreaService {
                 .toList();
     }
 
-    // ID 기반 휴게소 단건 조회
+    // ID 기반 휴게소 단건 조회 
     public RestAreaResponseDTO findByRestAreaId(Integer restAreaId) {
         System.out.println("[RestAreaService] findByRestAreaId : "+ restAreaId);
 
@@ -71,7 +72,7 @@ public class RestAreaService {
           
     }
 
-    // CODE 기반 휴게소 단건 조회
+    // CODE 기반 휴게소 단건 조회 
     public RestAreaResponseDTO findByCode(String code){
         System.out.println("[RestAreaService] findByCode : "+ code);
 
@@ -86,28 +87,35 @@ public class RestAreaService {
         }
     }
 
-    // 휴게소 수정
+    //  휴게소 수정 로직
+    // (참고: 클래스 레벨이나 이 메서드에 @Transactional 어노테이션을 붙이면
+    //  save를 명시적으로 호출하지 않아도 DB에 반영됩니다 - "dirty checking")
     public RestAreaResponseDTO update(Integer restAreaId, RestAreaRequestDTO request) {
         System.out.println("[RestAreaService] update restAreaId : "+ restAreaId);
         System.out.println("[RestAreaService] update : "+ request);
 
-        RestAreaEntity updated = RestAreaEntity.builder()
-                .restAreaId(restAreaId)
-                .name(request.getName())
-                .direction(request.getDirection())
-                .code(request.getCode())
-                .tel(request.getTel())
-                .address(request.getAddress())
-                .routeName(request.getRouteName())
-                .build();
+       
+        RestAreaEntity existingEntity = restRepository.findById(restAreaId)
+                .orElseThrow(() -> 
+                    new RuntimeException("해당 휴게소가 존재하지 않습니다. ID: " + restAreaId));
 
-        RestAreaEntity saved = restRepository.save(updated);
+        
+        existingEntity.setName(request.getName());
+        existingEntity.setDirection(request.getDirection());
+        existingEntity.setCode(request.getCode());
+        existingEntity.setTel(request.getTel());
+        existingEntity.setAddress(request.getAddress());
+        existingEntity.setRouteName(request.getRouteName());
+        existingEntity.setXValue(request.getXValue()); // DTO에 있는 필드를 모두 반영
+        existingEntity.setYValue(request.getYValue()); // DTO에 있는 필드를 모두 반영
 
-        return RestAreaResponseDTO.fromEntity(saved);
+        
+        RestAreaEntity savedEntity = restRepository.save(existingEntity);
 
+        return RestAreaResponseDTO.fromEntity(savedEntity);
     }
 
-    // 휴게소 삭제
+    // 휴게소 삭제 
     public boolean delete(Integer restAreaId) {
 
         RestAreaEntity entity = restRepository.findById(restAreaId)
@@ -118,20 +126,15 @@ public class RestAreaService {
         return true;
     }
 
-    // Direction 기반 휴게소 조회
+   
     public List<RestAreaResponseDTO> findByDirection(String direction) {
-        return restRepository.findAll().stream()
-                .filter(restArea -> restArea.getDirection().equalsIgnoreCase(direction))
-                .map(restArea -> new RestAreaResponseDTO(
-                        restArea.getRestAreaId(),
-                        restArea.getName(),
-                        restArea.getDirection(),
-                        restArea.getCode(),
-                        restArea.getTel(),
-                        restArea.getAddress(),
-                        restArea.getRouteName(),
-                        restArea.getXValue(),
-                        restArea.getYValue()))
+        
+
+        // (성능 향상)
+        List<RestAreaEntity> entities = restRepository.findByDirection(direction);
+
+        return entities.stream()
+                .map(entity -> RestAreaResponseDTO.fromEntity(entity))
                 .collect(Collectors.toList());
     }
 
@@ -144,6 +147,5 @@ public class RestAreaService {
         }
         return null;
     }
-
             
 }

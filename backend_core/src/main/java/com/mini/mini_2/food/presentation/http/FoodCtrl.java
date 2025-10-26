@@ -1,4 +1,4 @@
-package com.mini.mini_2.food.ctrl;
+package com.mini.mini_2.food.presentation.http;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.food.domain.dto.FoodRequestDTO;
-import com.mini.mini_2.food.domain.dto.FoodResponseDTO;
-import com.mini.mini_2.food.service.FoodService;
+import com.mini.mini_2.food.application.FoodService;
+import com.mini.mini_2.food.application.dto.FoodRequestDTO;
+import com.mini.mini_2.food.application.dto.FoodResponseDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
