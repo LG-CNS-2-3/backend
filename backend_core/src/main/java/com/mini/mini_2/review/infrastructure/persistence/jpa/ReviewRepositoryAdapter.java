@@ -45,7 +45,7 @@ public class ReviewRepositoryAdapter implements ReviewRepository {
     }
 
     @Override
-    public List<ReviewEntity> findByUser_UserId(Integer userId) {
-        return jpa.findByUser_UserId(userId);
+    public List<ReviewEntity> findByMember_Id(Long memberId) {
+        return jpa.findByMember_Id(memberId);
     }
 }

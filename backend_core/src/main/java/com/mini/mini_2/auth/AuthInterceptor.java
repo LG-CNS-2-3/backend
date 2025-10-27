@@ -1,5 +1,6 @@
 package com.mini.mini_2.auth;
 
+import com.mini.mini_2.member.infrastructure.security.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpMethod;
@@ -9,10 +10,10 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    private final TokenService tokenService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthInterceptor(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public AuthInterceptor(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -32,15 +33,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         String token = authHeader.substring(7);
-        if (!tokenService.validateToken(token)) {
+        if (!jwtTokenProvider.validateToken(token)) {
             System.out.println("Invalid or expired token");
             unauthorized(response, "Invalid or expired token");
             return false;
         }
 
         System.out.println("VALIDATE AUTHRIZATION");
-        String userId = tokenService.getUserIdFromToken(token);
-        request.setAttribute("userId", userId);
+        Long memberId = jwtTokenProvider.getMemberIdFromToken(token);
+        request.setAttribute("userId", memberId.toString());
         return true;
     }
 
