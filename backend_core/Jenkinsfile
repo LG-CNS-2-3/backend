@@ -75,14 +75,17 @@ pipeline {
                             ]) {
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
-                                        export EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
-                                        export GATEWAY_URL=${GATEWAY_URL}
-
-                                        echo "Fetching EC2 private IP..."
                                         export HOST_IP=\$(TOKEN=\$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-                                            -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
-                                            curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
-                                            http://169.254.169.254/latest/meta-data/local-ipv4)
+                                                                    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
+                                                                    curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
+                                                                    http://169.254.169.254/latest/meta-data/local-ipv4)
+
+                                                                echo "Creating .env file..."
+                                                                cat > .env << EOF
+                                        EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
+                                        GATEWAY_URL=${GATEWAY_URL}
+                                        HOST_IP=\${HOST_IP}
+                                        EOF
 
                                         echo "Pulling latest Docker image (backend-core)..."
                                         docker pull ${DOCKER_USERNAME}/backend-core:latest
