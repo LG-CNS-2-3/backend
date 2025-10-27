@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.core.RedisTemplate;
 
+
 @SpringBootApplication
+
 @EnableJpaRepositories(basePackages = "com.mini.mini_2")  // JPA 리포+어댑터 전부 스캔
 @EntityScan(basePackages = "com.mini.mini_2")             // 엔티티 전부 스캔
 public class Mini2Application {

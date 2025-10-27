@@ -1,4 +1,4 @@
-package com.mini.mini_2.user.domain.dto;
+package com.mini.mini_2.user.application.dto;
 
 import com.mini.mini_2.user.domain.entity.UserEntity;
 

@@ -33,4 +33,9 @@ public class FacilityRepositoryAdapter implements FacilityRepository {
     public List<RestAreaEntity> findRestAreaByTypes(List<String> names) {
         return jpa.findRestAreaByTypes(names);
     }
+
+    @Override
+    public List<FacilityEntity> findAll() {
+        return jpa.findAll();
+    }
 }

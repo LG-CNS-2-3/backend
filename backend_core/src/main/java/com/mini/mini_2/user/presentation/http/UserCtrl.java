@@ -1,4 +1,4 @@
-package com.mini.mini_2.user.ctrl;
+package com.mini.mini_2.user.presentation.http;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.user.domain.dto.UserRequestDTO;
-import com.mini.mini_2.user.domain.dto.UserResponseDTO;
-import com.mini.mini_2.user.service.UserService;
+// [수정] DTO 및 Service 임포트 경로 변경
+import com.mini.mini_2.user.application.dto.UserRequestDTO;
+import com.mini.mini_2.user.application.dto.UserResponseDTO;
+import com.mini.mini_2.user.application.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

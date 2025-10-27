@@ -15,4 +15,6 @@ public interface FacilityRepository {
     List<FacilityEntity> findByRestArea_RestAreaId(Integer restAreaId);
 
     List<RestAreaEntity> findRestAreaByTypes(List<String> names);
+
+    List<FacilityEntity> findAll();
 }

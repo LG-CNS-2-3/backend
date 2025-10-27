@@ -1,4 +1,4 @@
-package com.mini.mini_2.review.service;
+package com.mini.mini_2.review.application; // [수정] 패키지 변경
 
 import java.util.List;
 import java.util.Optional;
@@ -6,14 +6,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+// [수정] DTO 임포트 경로 변경
+import com.mini.mini_2.review.application.dto.ReviewRequestDTO;
+import com.mini.mini_2.review.application.dto.ReviewResponseDTO;
+// [수정] Entity 임포트 경로 변경
+import com.mini.mini_2.review.domain.entity.ReviewEntity;
+// [핵심 수정] Domain 계층의 Repository 인터페이스들을 임포트
+import com.mini.mini_2.review.domain.ReviewRepository;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
-import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
-import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
-import com.mini.mini_2.review.domain.entity.ReviewEntity;
-import com.mini.mini_2.review.repository.ReviewRepository;
+import com.mini.mini_2.user.domain.UserRepository;
 import com.mini.mini_2.user.domain.entity.UserEntity;
-import com.mini.mini_2.user.repository.UserRepository;
 
 @Service
 public class ReviewService {

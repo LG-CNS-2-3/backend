@@ -22,17 +22,19 @@ import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
 import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
-import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
-import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
+import com.mini.mini_2.review.application.dto.ReviewRequestDTO;
+import com.mini.mini_2.review.application.dto.ReviewResponseDTO;
+import com.mini.mini_2.review.domain.ReviewRepository;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
-import com.mini.mini_2.review.repository.ReviewRepository;
-import com.mini.mini_2.user.domain.dto.UserRequestDTO;
-import com.mini.mini_2.user.domain.dto.UserResponseDTO;
+import com.mini.mini_2.user.application.dto.UserRequestDTO;
+import com.mini.mini_2.user.application.dto.UserResponseDTO;
 import com.mini.mini_2.user.domain.entity.UserEntity;
-import com.mini.mini_2.user.repository.UserRepository;
-
+import com.mini.mini_2.user.domain.UserRepository;
 import org.springframework.test.context.ActiveProfiles;
-@ActiveProfiles("test")
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = "com.mini.mini_2") // 2. "com.mini.mini_2" 하위의 모든 @Entity 스캔
 
 @SpringBootTest
 @Transactional
