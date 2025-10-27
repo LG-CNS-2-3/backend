@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/members/login",
-                                "/api/v1/members/join",
+                                "/api/v1/members/register",
                                 "/api/v1/mini/**"
                         ).permitAll()
                         .anyRequest().authenticated()
