@@ -75,7 +75,8 @@ pipeline {
                         echo "==================== Deploying to EC2 (backend-map) ===================="
                         sshagent(credentials: ['EC2_SSH_CREDENTIALS']) {
                             withCredentials([
-                                string(credentialsId: 'TMAP_API_KEY', variable: 'TMAP_API_KEY')
+                                string(credentialsId: 'TMAP_API_KEY', variable: 'TMAP_API_KEY'),
+                                string(credentialsId: 'EUREKA_SERVICE_URL', variable: 'EUREKA_SERVICE_URL')
                             ]){
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
@@ -87,6 +88,7 @@ pipeline {
                                          docker run -d --name backend-map-container \
                                             -p 8080:8080 \
                                             -e TMAP_API_KEY=${TMAP_API_KEY} \
+                                            -e EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL} \
                                             ${DOCKER_USERNAME}/backend-map:latest
 
                                          docker image prune -f
