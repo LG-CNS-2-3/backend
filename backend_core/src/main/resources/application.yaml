@@ -45,3 +45,13 @@ openai:
   api-key: ${OPEN_AI_KEY}
   url: ${OPEN_AI_URL}
   model: ${OPEN_AI_MODEL}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${EUREKA_INSTANCE_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${EUREKA_SERVICE_URL}/eureka
