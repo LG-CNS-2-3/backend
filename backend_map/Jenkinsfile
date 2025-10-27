@@ -19,6 +19,17 @@ pipeline{
             }
         }
 
+        stage('Print Working Directory') {
+            steps {
+                echo "📂 Checking current working directory..."
+                sh '''
+                    echo "Current working directory: $(pwd)"
+                    echo "Listing files:"
+                    ls -al
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 echo "Building backend-map..."
