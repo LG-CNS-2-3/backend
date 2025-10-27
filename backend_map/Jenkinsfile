@@ -80,7 +80,8 @@ pipeline{
                 sshagent(credentials: ['EC2_SSH_CREDENTIALS']) {
                     withCredentials([
                         string(credentialsId: 'TMAP_API_KEY', variable: 'TMAP_API_KEY'),
-                        string(credentialsId: 'EUREKA_SERVICE_URL', variable: 'EUREKA_SERVICE_URL')
+                        string(credentialsId: 'EUREKA_SERVICE_URL', variable: 'EUREKA_SERVICE_URL'),
+                        string(credentialsId: 'GATEWAY_URL', variable: 'GATEWAY_URL')
                     ]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
@@ -103,6 +104,7 @@ pipeline{
                                     -e EUREKA_INSTANCE_IP_ADDRESS=\${HOST_IP} \
                                     -e TMAP_API_KEY=${TMAP_API_KEY} \
                                     -e EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL} \
+                                    -e GATEWAY_URL=${GATEWAY_URL} \
                                     ${DOCKER_USERNAME}/backend-map:latest
 
                                 docker image prune -f
@@ -126,3 +128,4 @@ pipeline{
         }
     }
 }
+
