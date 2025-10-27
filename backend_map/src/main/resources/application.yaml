@@ -26,7 +26,16 @@ spring:
 #      level:
 #        org.hibernate.type.descriptor.sql: trace
 
+
+
 tmap:
   api:
     url: https://apis.openapi.sk.com
     key: ${TMAP_API_KEY}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${EUREKA_SERVICE_URL}/eureka
