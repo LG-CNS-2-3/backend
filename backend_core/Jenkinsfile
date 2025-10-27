@@ -87,9 +87,6 @@ pipeline {
                                         cat << EOF > .env
                                         EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
                                         GATEWAY_URL=${GATEWAY_URL}
-                                        # SPRING_URL=${SPRING_URL}
-                                        # REDIS_HOST=${REDIS_HOST}
-                                        # JWT_SECRET_KEY=${JWT_SECRET_KEY}
                                         EOF
 
                                         # 8. 동적 IP 주소 가져오기
