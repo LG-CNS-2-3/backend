@@ -35,6 +35,6 @@ public class SwaggerConfig {
                                 .bearerFormat("JWT")
                                 .description("JWT 토큰을 입력 ('Bearer ' 접두사 제외)")))
                 .servers(List.of(new Server()
-                        .url(gatewayUrl + "/api/v1")));
+                        .url(gatewayUrl)));
     }
 }
