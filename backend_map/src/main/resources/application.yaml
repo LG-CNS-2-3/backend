@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: backend_map
+    name: map-service
 
 #  datasource:
 #    url: jdbc:mariadb://localhost:3306/yogijogi

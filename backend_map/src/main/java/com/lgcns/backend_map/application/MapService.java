@@ -15,7 +15,6 @@ import org.springdoc.webmvc.core.service.RequestService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ public class MapService {
     private final PlaceSearchApi placeSearchApi;
     private final RouteSearchApi routeSearchApi;
     private final RouteRestAreaSearchApi routeRestAreaSearchApi;
-    private final RequestService requestService;
 
     public PlaceSearchResDTO searchPlace(String query){
         List<Place> places = placeSearchApi.searchPoi(query);
