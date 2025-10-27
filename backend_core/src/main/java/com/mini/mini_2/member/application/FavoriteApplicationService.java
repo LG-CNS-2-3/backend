@@ -9,7 +9,7 @@ import com.mini.mini_2.member.domain.Member;
 import com.mini.mini_2.member.domain.MemberRepository;
 import com.mini.mini_2.member.domain.exception.MemberNotFoundException;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

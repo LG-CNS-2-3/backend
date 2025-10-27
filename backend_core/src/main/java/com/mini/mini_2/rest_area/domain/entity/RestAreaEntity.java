@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mini.mini_2.facility.domain.entity.FacilityEntity;
-import com.mini.mini_2.favorite.domain.entity.FavoriteEntity;
+import com.mini.mini_2.member.domain.Favorite;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
 
@@ -69,7 +69,7 @@ public class RestAreaEntity {
 
     @OneToMany(mappedBy = "restArea", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<FavoriteEntity> favorites = new ArrayList<>();
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "restArea", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

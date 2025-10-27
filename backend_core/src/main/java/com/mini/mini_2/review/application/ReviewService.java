@@ -15,30 +15,30 @@ import com.mini.mini_2.review.domain.entity.ReviewEntity;
 import com.mini.mini_2.review.domain.ReviewRepository;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
-import com.mini.mini_2.user.domain.UserRepository;
-import com.mini.mini_2.user.domain.entity.UserEntity;
+import com.mini.mini_2.member.domain.MemberRepository;
+import com.mini.mini_2.member.domain.Member;
 
 @Service
 public class ReviewService {
     
     @Autowired
     private ReviewRepository reviewRepository;
-    
-    @Autowired 
-    private UserRepository userRepository;
-    
+
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Autowired
     private RestAreaRepository restAreaRepository;
-    
+
     // 리뷰 작성
     public ReviewResponseDTO create(ReviewRequestDTO request) {
         System.out.println("[ReviewService] create : "+ request);
-        
-        Optional<UserEntity> userEntity = userRepository.findById(request.getUserId());
-        Optional<RestAreaEntity> restAreaEntity = restAreaRepository.findById(request.getRestAreaId());
-        
 
-        ReviewEntity entity = reviewRepository.save(request.toEntity(userEntity.get(), restAreaEntity.get()));
+        Optional<Member> member = memberRepository.findById(Long.valueOf(request.getUserId()));
+        Optional<RestAreaEntity> restAreaEntity = restAreaRepository.findById(request.getRestAreaId());
+
+
+        ReviewEntity entity = reviewRepository.save(request.toEntity(member.get(), restAreaEntity.get()));
         return ReviewResponseDTO.fromEntity(entity);
     }
 
@@ -55,10 +55,10 @@ public class ReviewService {
                         .toList();
     }
     
-    // ID 기반 휴게소 단건 조회
+    // ID 기반 회원 리뷰 조회
     public List<ReviewResponseDTO> findByUserId(Integer userId) {
 
-        List<ReviewEntity> responses = reviewRepository.findByUser_UserId(userId);
+        List<ReviewEntity> responses = reviewRepository.findByMember_Id(Long.valueOf(userId));
 
         return responses.stream()
                 .map(entity -> ReviewResponseDTO.fromEntity(entity))

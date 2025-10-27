@@ -17,8 +17,8 @@ public interface ReviewRepository {
     void deleteById(Integer reviewId);
 
     List<ReviewEntity> findByRestArea_RestAreaIdOrderByRatingDesc(Integer restAreaId);
-    
+
     List<ReviewEntity> findByRestArea_RestAreaIdOrderByCreatedAtDesc(Integer restAreaId);
-    
-    List<ReviewEntity> findByUser_UserId(Integer userId);
+
+    List<ReviewEntity> findByMember_Id(Long memberId);
 }
