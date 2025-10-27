@@ -8,7 +8,7 @@ pipeline {
 
     environment{
         DOCKERHUB_USERNAME = "khw73850"
-        EC2_HOST = ubuntu@10.0.0.20
+        EC2_HOST = "ubuntu@10.0.0.20"
     }
 
     stages{
