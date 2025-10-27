@@ -9,6 +9,7 @@ pipeline {
     environment{
         DOCKER_USERNAME = "khw73850"
         EC2_HOST = "ubuntu@10.0.0.24" // backend-core 서버 IP
+        BASTION_HOST = "ubuntu@52.11.248.251" // 경유지 (Bastion 서버 Public IP)
     }
 
     stages{
@@ -62,22 +63,58 @@ pipeline {
                         }
                     }
                 }
-                stage('core: Deploy'){
-                    steps{
-                        echo "==================== Deploying to EC2 (backend-core) ===================="
-                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
-                                    docker pull ${DOCKER_USERNAME}/backend-core:latest
-                                    docker stop backend-core-container || true
-                                    docker rm backend-core-container || true
-                                    docker run -d --name backend-core-container -p 8081:8080 ${DOCKER_USERNAME}/backend-core:latest
-                                    docker image prune -f
-                                '''
-                            """
+                
+                // ==================== [오류 수정] 중첩된 블록 및 여분 괄호 제거 ====================
+                stage('Deploy to EC2') {
+                    steps {
+                        echo "Deploying backend-core to EC2 using docker-compose via Bastion..."
+                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']) {
+                            withCredentials([
+                                // 3. .env 파일로 생성할 Credential 목록
+                                string(credentialsId: 'EUREKA_SERVICE_URL', variable: 'EUREKA_SERVICE_URL'),
+                                string(credentialsId: 'GATEWAY_URL', variable: 'GATEWAY_URL'),
+                            ]) {
+                                sh """
+                                    # 5. Bastion Host 경유를 위해 -J 옵션 추가
+                                    ssh -o StrictHostKeyChecking=no -J ${BASTION_HOST} ${EC2_HOST} '''
+                                        
+                                        # 6. core용 docker-compose.yaml이 있는 디렉터리로 이동
+                                        APP_DIR="/home/ubuntu/app/backend-core"
+                                        cd $APP_DIR
+
+                                        # 7. Jenkins Credential로 .env 파일 동적 생성
+                                        echo "Creating .env file..."
+                                        cat << EOF > .env
+                                        EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
+                                        GATEWAY_URL=${GATEWAY_URL}
+                                        # SPRING_URL=${SPRING_URL}
+                                        # REDIS_HOST=${REDIS_HOST}
+                                        # JWT_SECRET_KEY=${JWT_SECRET_KEY}
+                                        EOF
+
+                                        # 8. 동적 IP 주소 가져오기
+                                        echo "Fetching EC2 private IP..."
+                                        export HOST_IP=\$(TOKEN=\$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+                                            -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
+                                            curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
+                                            http://169.254.169.254/latest/meta-data/local-ipv4)
+
+                                        # 9. 새 이미지 pull
+                                        echo "Pulling latest Docker image (backend-core)..."
+                                        docker-compose pull
+
+                                        # 10. 컨테이너 재시작
+                                        echo "Running docker-compose up (backend-core)..."
+                                        docker-compose up -d
+
+                                        docker image prune -f
+                                    '''
+                                """
+                            }
                         }
                     }
                 }
+                // =========================================================================
             }
         } // ==================== End of backend-core ====================
     }
