@@ -35,6 +35,9 @@ spring:
       
 server:
   port: ${SPRING_PORT}
+
+gateway:
+  url: ${GATEWAY_URL}
   
 jwt:
   secret: ${JWT_SECRET_KEY}
