@@ -80,7 +80,7 @@ pipeline {
                                         
                                         # 6. core용 docker-compose.yaml이 있는 디렉터리로 이동
                                         APP_DIR="/home/ubuntu/app/backend-core"
-                                        cd $APP_DIR
+                                        cd \$APP_DIR
 
                                         # 7. Jenkins Credential로 .env 파일 동적 생성
                                         echo "Creating .env file..."
