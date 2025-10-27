@@ -89,10 +89,10 @@ pipeline {
                                 ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
                                      docker pull ${DOCKER_USERNAME}/backend-map:latest
 
-                                     docker stop backend_map-container || true
-                                     docker rm backend_map-container || true
+                                     docker stop backend-map-container || true
+                                     docker rm backend-map-container || true
 
-                                     docker run -d --name backend_map-container -p 8080:8080 ${DOCKER_USERNAME}/backend_map:latest
+                                     docker run -d --name backend_map-container -p 8080:8080 ${DOCKER_USERNAME}/backend-map:latest
 
                                      docker image prune -f
                                 '''
