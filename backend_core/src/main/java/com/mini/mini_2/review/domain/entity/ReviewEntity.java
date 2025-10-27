@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.user.domain.entity.UserEntity;
+import com.mini.mini_2.member.domain.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"restArea", "user"}) // [수정] user도 exclude
+@ToString(exclude = {"restArea", "member"})
 public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +40,8 @@ public class ReviewEntity {
 
     @ManyToOne(fetch = FetchType.LAZY,
                optional = false)
-    @JoinColumn(name = "user_id")       // 테이블 컬럼 이름
-    private UserEntity user;            // UserEntity 의 mappedBy
+    @JoinColumn(name = "member_id")
+    private Member member;
     
     @ManyToOne(fetch = FetchType.LAZY,
                optional = false)

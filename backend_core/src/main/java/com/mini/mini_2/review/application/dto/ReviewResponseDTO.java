@@ -27,7 +27,7 @@ public class ReviewResponseDTO {
     public static ReviewResponseDTO fromEntity(ReviewEntity entity) {
         return ReviewResponseDTO.builder()
                                 .reviewId(entity.getReviewId())
-                                .userId(entity.getUser().getUserId())
+                                .userId(entity.getMember().getId().intValue())
                                 .restAreaId(entity.getRestArea().getRestAreaId())
                                 .rating(entity.getRating())
                                 .comment(entity.getComment())

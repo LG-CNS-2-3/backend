@@ -12,7 +12,7 @@ public interface SpringDataReviewRepository extends JpaRepository<ReviewEntity, 
     
     // (내부 로직은 기존과 동일)
 
-    List<ReviewEntity> findByUser_UserId(Integer userId);
+    List<ReviewEntity> findByMember_Id(Long memberId);
 
     // 최신순(정렬)
     List<ReviewEntity> findByRestArea_RestAreaIdOrderByCreatedAtDesc(Integer restAreaId);
