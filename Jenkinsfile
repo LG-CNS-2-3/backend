@@ -9,7 +9,6 @@ pipeline {
     environment{
         DOCKER_USERNAME = "khw73850"
         EC2_HOST = "ubuntu@10.0.0.20"
-        TMAP_API_KEY = ""
     }
 
     stages{
@@ -74,25 +73,26 @@ pipeline {
                 stage('map: Deploy'){
                     steps{
                         echo "==================== Deploying to EC2 (backend-map) ===================="
-                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
+                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']) {
                             withCredentials([
                                 string(credentialsId: 'TMAP_API_KEY', variable: 'TMAP_API_KEY')
-                            ])
-                            sh """
-                                ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
-                                     docker pull ${DOCKER_USERNAME}/backend-map:latest
+                            ]){
+                                sh """
+                                    ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
+                                         docker pull ${DOCKER_USERNAME}/backend-map:latest
 
-                                     docker stop backend-map-container || true
-                                     docker rm backend-map-container || true
+                                         docker stop backend-map-container || true
+                                         docker rm backend-map-container || true
 
-                                     docker run -d --name backend-map-container \
-                                        -p 8080:8080 \
-                                        -e TMAP_API_KEY=${TMAP_API_KEY} \
-                                        ${DOCKER_USERNAME}/backend-map:latest
+                                         docker run -d --name backend-map-container \
+                                            -p 8080:8080 \
+                                            -e TMAP_API_KEY=${TMAP_API_KEY} \
+                                            ${DOCKER_USERNAME}/backend-map:latest
 
-                                     docker image prune -f
-                                '''
-                            """
+                                         docker image prune -f
+                                    '''
+                                """
+                            }
                         }
                     }
                 }
