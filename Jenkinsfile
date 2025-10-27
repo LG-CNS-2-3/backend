@@ -1,3 +1,4 @@
+// backend-map Jenkinsfile
 pipeline {
 	agent any
 
@@ -101,6 +102,119 @@ pipeline {
                                     '''
                                 """
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
+
+
+//------------------------------------------------------------//
+
+
+// backend-core Jenkinsfile
+pipeline {
+	agent any
+
+    tools{
+        gradle 'gradle'
+        jdk 'openJDK17'
+    }
+
+    environment{
+        DOCKER_USERNAME = "khw73850"
+        EC2_HOST = "ubuntu@10.0.0.20"
+    }
+
+    stages{
+        stage('Checkout') {
+            steps {
+                echo "Checking out source..."
+                checkout scm
+            }
+        }
+
+        stage('backend-core Pipeline'){
+            when {
+                anyOf{
+                    changeset "backend_core/**"
+                    branch 'develop'
+                }
+            }
+            stages{
+                stage('core: Build'){
+                    steps{
+                        echo "==================== Building backend-core ===================="
+                        dir('backend_core'){
+                            sh '''
+                                chmod +x gradlew
+                                ./gradlew build -x test
+                            '''
+
+                        }
+                    }
+                }
+//                 stage('map: Test'){
+//                     steps{
+//                         echo "==================== Testing backend_core ===================="
+//                         dir('backend_core'){
+//                             sh './gradlew test --no-daemon'
+//                         }
+//                     }
+//                 }
+                stage('core: Docker Build and Push'){
+                    steps{
+                        echo "==================== Building & Pushing Docker Image(backend_core) ===================="
+
+                        script{
+                            withCredentials([usernamePassword(
+                                credentialsId: 'DOCKERHUB_PASSWORD',
+                                usernameVariable: 'DOCKER_USER',
+                                passwordVariable: 'DOCKER_PASS'
+                            )]){
+                                sh """
+                                   docker build -t ${DOCKER_USER}/backend-core:${currentBuild.number} ./backend_map
+                                   docker tag ${DOCKER_USER}/backend-core:${currentBuild.number} ${DOCKER_USER}/backend-core:latest
+                                   echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+                                   docker push ${DOCKER_USER}/backend-core:${currentBuild.number}
+                                   docker push ${DOCKER_USER}/backend-core:latest
+                                   docker logout
+                                """
+                            }
+                        }
+                    }
+                }
+
+                stage('core: Deploy'){
+                    steps{
+                        echo "==================== Deploying to EC2 (backend-core) ===================="
+                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
+                            sh """
+                                ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
+                                     docker pull ${DOCKER_USERNAME}/backend-core:latest
+
+                                     docker stop backend-core-container || true
+                                     docker rm backend-core-container || true
+
+                                     docker run -d --name backend-core-container -p 8081:8080 ${DOCKER_USERNAME}/backend-core:latest
+
+                                     docker image prune -f
+                                '''
+                            """
                         }
                     }
                 }
