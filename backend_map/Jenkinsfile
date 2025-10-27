@@ -33,10 +33,12 @@ pipeline{
         stage('Build') {
             steps {
                 echo "Building backend-map..."
-                sh '''
-                    chmod +x gradlew
-                    ./gradlew clean build -x test
-                '''
+                dir('backend_map') {
+                    sh '''
+                        chmod +x gradlew
+                        ./gradlew clean build -x test
+                    '''
+                }
             }
         }
 
