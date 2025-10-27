@@ -9,7 +9,6 @@ pipeline {
     environment{
         DOCKER_USERNAME = "khw73850"
         EC2_HOST = "ubuntu@10.0.0.24" // backend-core 서버 IP
-        BASTION_HOST = "ubuntu@52.11.248.251" // 경유지 (Bastion 서버 Public IP)
     }
 
     stages{
@@ -94,7 +93,7 @@ pipeline {
 
                                         # 9. 새 이미지 pull
                                         echo "Pulling latest Docker image (backend-core)..."
-                                        docker-compose pull
+                                        docker pull ${DOCKER_USERNAME}/backend-core:latest
 
                                         # 10. 컨테이너 재시작
                                         echo "Running docker-compose up (backend-core)..."
