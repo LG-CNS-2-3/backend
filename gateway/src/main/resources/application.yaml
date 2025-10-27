@@ -4,7 +4,10 @@ server:
 spring:
   application:
     name: api-gateway  # Eureka에 등록될 이름
-  
+
+  config:
+    import: optional:file:.env[.properties]
+
   data:
     redis:
       host: ${REDIS_HOST}

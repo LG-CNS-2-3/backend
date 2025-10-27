@@ -43,6 +43,9 @@ dependencies {
     // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Dotenv (.env 파일 로드)
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 }
 
 dependencyManagement {
