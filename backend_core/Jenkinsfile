@@ -88,7 +88,7 @@ pipeline {
                                         docker pull ${DOCKER_USERNAME}/backend-core:latest
 
                                         echo "Running docker-compose up (backend-core)..."
-                                        docker-compose up -d
+                                        docker compose up -d
 
                                         docker image prune -f
                                     '''
