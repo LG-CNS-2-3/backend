@@ -62,7 +62,7 @@ pipeline{
                         )
                     ]) {
                         sh """
-                            docker build -t ${DOCKER_USER}/backend-map:${currentBuild.number} ./backend-map
+                            docker build -t ${DOCKER_USER}/backend-map:${currentBuild.number} ./backend_map
                             docker tag ${DOCKER_USER}/backend-map:${currentBuild.number} ${DOCKER_USER}/backend-map:latest
                             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
                             docker push ${DOCKER_USER}/backend-map:${currentBuild.number}
