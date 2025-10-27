@@ -19,17 +19,6 @@ pipeline {
             }
         }
 
-        stage('Check File Structure') {
-            steps {
-                echo "==================== Checking project structure ===================="
-                sh '''
-                    echo "현재 위치: $(pwd)"
-                    ls -al
-                    ls -al backend_map || echo "backend-map 폴더가 없습니다."
-                '''
-            }
-        }
-
         stage('backend-map Pipeline'){
             when {
                 anyOf{
