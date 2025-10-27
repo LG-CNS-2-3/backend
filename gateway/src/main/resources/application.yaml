@@ -1,0 +1,65 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway  # Eureka에 등록될 이름
+  
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  
+  # Gateway 라우팅 설정
+  cloud:
+    gateway:
+      routes:
+        # 인증 제외 경로 (구체적인 경로 먼저)
+        - id: auth-register
+          uri: lb://mini_2
+          predicates:
+            - Path=/api/v1/members/register
+          filters:
+            - StripPrefix=0 
+
+        - id: auth-login
+          uri: lb://mini_2
+          predicates:
+            - Path=/api/v1/members/login
+          filters:
+            - StripPrefix=0 
+
+        - id: auth-refresh
+          uri: lb://mini_2
+          predicates:
+            - Path=/api/v1/members/refresh
+          filters:
+            - StripPrefix=0 
+
+        - id: backend-map
+          uri: lb://backend-map
+          predicates:
+            - Path=/api/v1/maps/**
+          filters:
+            - StripPrefix=0
+
+        - id: backend-core-general
+          uri: lb://mini_2
+          predicates:
+            # /api/v1/members/** 또는 /api/v1/mini/** 로 시작하는 모든 경로 (위의 제외 경로를 제외한 나머지)
+            - Path=/api/v1/members/**, /api/v1/mini/**
+          filters:
+            - StripPrefix=0
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: ${EUREKA_INSTANCE_IP_ADDRESS}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${EUREKA_SERVICE_URL}/eureka
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
