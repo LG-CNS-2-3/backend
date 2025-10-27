@@ -14,6 +14,9 @@ public class SwaggerConfig {
     @Value("${gateway.url}")
     private String gatewayUrl;
 
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
     @Bean
     public OpenAPI openAPI(){
         return new OpenAPI()
@@ -23,7 +26,7 @@ public class SwaggerConfig {
                         .description("Backend Map API"))
                 .servers(List.of(
                         new Server()
-                                .url(gatewayUrl)
+                                .url(gatewayUrl + contextPath)
                 ));
     }
 }
