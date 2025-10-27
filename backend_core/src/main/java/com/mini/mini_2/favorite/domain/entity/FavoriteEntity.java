@@ -31,6 +31,7 @@ public class FavoriteEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "favorite_id")
     private Integer favoriteId;
     
     @Column(length = 500)
