@@ -81,7 +81,6 @@ pipeline {
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
 
-
                                          docker pull ${DOCKER_USERNAME}/backend-map:latest
 
                                          docker stop backend-map-container || true
@@ -91,7 +90,7 @@ pipeline {
 
                                          docker run -d --name backend-map-container \
                                             -p 8080:8080 \
-                                            -e EUREKA_INSTANCE_IP_ADDRESS=\${HOST_IP}
+                                            -e EUREKA_INSTANCE_IP_ADDRESS=\${HOST_IP} \
                                             -e TMAP_API_KEY=${TMAP_API_KEY} \
                                             -e EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL} \
                                             ${DOCKER_USERNAME}/backend-map:latest
