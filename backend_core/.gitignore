@@ -25,6 +25,7 @@ log/
 *.yml
 *.yaml
 !docker-compose.yaml
+!application.yaml
 application-*.yml
 application-*.yaml
 
