@@ -86,7 +86,7 @@ pipeline {
                         echo "==================== Deploying to EC2 (backend-map) ===================="
                         sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
                             sh """
-                                ssh -o StrictHostKeyChecking=no ${EC2_HOST}'''
+                                ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
                                      docker pull ${DOCKER_USERNAME}/backend-map:latest
 
                                      docker stop backend_map-container || true
