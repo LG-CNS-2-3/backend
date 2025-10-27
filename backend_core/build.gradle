@@ -81,6 +81,10 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.mockito:mockito-core'
+    
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    
 }
 
 tasks.named('test') {

@@ -43,6 +43,9 @@ eureka:
     service-url:
       defaultZone: http://${EUREKA_SERVICE_URL}/eureka
 
+gateway:
+  url: ${GATEWAY_URL}
+
 springdoc:
   api-docs:
     enabled: true

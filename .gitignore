@@ -22,6 +22,10 @@ log/
 ### Environment / Config ###
 .env
 *.properties
+*.yml
+*.yaml
+!docker-compose.yaml
+!application.yaml
 
 ### OS Temp ###
 Thumbs.db
