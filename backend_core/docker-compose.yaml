@@ -1,0 +1,55 @@
+version: "3.8"
+
+name: backend-core
+
+services:
+  
+  app:
+    build: .
+    container_name: backend-core-app 
+    ports:
+      - "8081:8080" 
+    environment:
+      - SPRING_PORT=8080
+      - SPRING_DRIVER=org.mariadb.jdbc.Driver
+      - SPRING_URL=jdbc:mariadb://db:3306/mini2?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+      - SPRING_USERNAME=mini2_user
+      - SPRING_PASSWORD=mini2_pass
+      - REDIS_HOST=redis # 서비스 이름(redis)으로 컨테이너 간 통신
+      - REDIS_PORT=6379
+      - JWT_SECRET_KEY=Tvhnl3/iJ5RYjJBoFiqUsTGuv+mx0nojz8sfYQ+U3XYFMmltUTTli0S/jT2KzIOv
+      - JWT_ACCESS_TTL_MS=3600000
+      - JWT_REFRESH_TTL_MS=604800000
+
+    depends_on:
+      - db      
+      - redis   
+
+
+  db:
+    image: mariadb:11.3 
+    container_name: backend-core-db 
+    environment:
+      
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: mini2
+      MYSQL_USER: mini2_user
+      MYSQL_PASSWORD: mini2_pass
+      TZ: 'Asia/Seoul'
+    ports:
+      - "3307:3306" 
+    volumes:
+      - mariadb_core_data:/var/lib/mysql 
+
+  # 3. Redis 서비스
+  redis:
+    image: redis:alpine 
+    container_name: backend-core-redis 
+    ports:
+      - "6379:6379" 
+    volumes:
+      - redis_core_data:/data 
+
+volumes:
+  mariadb_core_data: 
+  redis_core_data:   
