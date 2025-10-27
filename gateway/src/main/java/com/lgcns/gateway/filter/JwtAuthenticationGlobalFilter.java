@@ -28,11 +28,6 @@ public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
     private final JwtTokenProvider jwtTokenProvider;
 
     private static final List<String> EXCLUDE_PATHS = Arrays.asList(
-            "/auth/login",
-            "/auth/register",
-            "/api/v1/mini/user/create",
-            "/api/v1/mini/user/login",
-            "/api/v1/mini/user/refresh",
             "/api/v1/members/register",
             "/api/v1/members/login",
             "/api/v1/members/refresh",
