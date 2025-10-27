@@ -1,0 +1,118 @@
+pipeline {
+	agent any
+
+    tools{
+        gradle 'gradle'
+        jdk 'openJDK17'
+    }
+
+    environment{
+        DOCKER_USERNAME = "khw73850"
+        EC2_HOST = "ubuntu@10.0.0.20"
+    }
+
+    stages{
+        stage('Checkout') {
+            steps {
+                echo "Checking out source..."
+                checkout scm
+            }
+        }
+
+        stage('Check File Structure') {
+            steps {
+                echo "==================== Checking project structure ===================="
+                sh '''
+                    echo "현재 위치: $(pwd)"
+                    ls -al
+                    ls -al backend_map || echo "backend-map 폴더가 없습니다."
+                '''
+            }
+        }
+
+        stage('backend-map Pipeline'){
+            when {
+                anyOf{
+                    changeset "backend_map/**"
+                    branch 'develop'
+                }
+            }
+            stages{
+                stage('map: Build'){
+                    steps{
+                        echo "==================== Building backend-map ===================="
+                        dir('backend_map'){
+                            sh '''
+                                chmod +x gradlew
+                                ./gradlew build -x test
+                            '''
+
+                        }
+                    }
+                }
+//                 stage('map: Test'){
+//                     steps{
+//                         echo "==================== Testing backend_map ===================="
+//                         dir('backend_map'){
+//                             sh './gradlew test --no-daemon'
+//                         }
+//                     }
+//                 }
+                stage('map: Docker Build and Push'){
+                    steps{
+                        echo "==================== Building & Pushing Docker Image(backend_map) ===================="
+
+                        script{
+                            withCredentials([usernamePassword(
+                                credentialsId: 'DOCKERHUB_PASSWORD',
+                                usernameVariable: 'DOCKER_USER',
+                                passwordVariable: 'DOCKER_PASS'
+                            )]){
+                                sh """
+                                   docker build -t ${DOCKER_USER}/backend-map:${currentBuild.number} ./backend_map
+                                   docker tag ${DOCKER_USER}/backend-map:${currentBuild.number} ${DOCKER_USER}/backend-map:latest
+                                   echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+                                   docker push ${DOCKER_USER}/backend-map:${currentBuild.number}
+                                   docker push ${DOCKER_USER}/backend-map:latest
+                                   docker logout
+                                """
+                            }
+                        }
+                    }
+                }
+
+                stage('map: Deploy'){
+                    steps{
+                        echo "==================== Deploying to EC2 (backend-map) ===================="
+                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
+                            sh """
+                                ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
+                                     docker pull ${DOCKER_USERNAME}/backend-map:latest
+
+                                     docker stop backend-map-container || true
+                                     docker rm backend-map-container || true
+
+                                     docker run -d --name backend-map-container -p 8080:8080 ${DOCKER_USERNAME}/backend-map:latest
+
+                                     docker image prune -f
+                                '''
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
