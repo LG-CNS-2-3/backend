@@ -92,7 +92,7 @@ pipeline {
                                      docker stop backend-map-container || true
                                      docker rm backend-map-container || true
 
-                                     docker run -d --name backend_map-container -p 8080:8080 ${DOCKER_USERNAME}/backend-map:latest
+                                     docker run -d --name backend-map-container -p 8080:8080 ${DOCKER_USERNAME}/backend-map:latest
 
                                      docker image prune -f
                                 '''
