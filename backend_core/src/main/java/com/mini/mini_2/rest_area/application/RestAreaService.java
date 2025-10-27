@@ -1,0 +1,151 @@
+package com.mini.mini_2.rest_area.application;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+// import org.springframework.transaction.annotation.Transactional; 업데이트 시 @Transactional 사용 가능
+
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+
+
+
+@Service
+public class RestAreaService {
+
+    @Autowired
+    private RestAreaRepository restRepository;
+
+    // 휴게소 생성 
+    public RestAreaResponseDTO create(RestAreaRequestDTO request){ 
+        System.out.println("[RestAreaService] create : "+ request); 
+        
+        String code = request.getCode();
+        Optional<RestAreaEntity> existData = restRepository.findByCode(code);
+        RestAreaEntity entityToSave;
+        
+        if (existData.isPresent()) {
+            RestAreaEntity originData = existData.get();
+            originData.setName(request.getName());
+            originData.setDirection(request.getDirection());
+            originData.setTel(request.getTel());
+            originData.setAddress(request.getAddress());
+            originData.setRouteName(request.getRouteName());
+            originData.setXValue(request.getXValue());
+            originData.setYValue(request.getYValue());
+            entityToSave = originData;
+        } else {
+            entityToSave = request.toEntity();
+        }
+
+        RestAreaEntity entity = restRepository.save(entityToSave);
+        return RestAreaResponseDTO.fromEntity(entity);
+    }
+
+    // 휴게소 전체 조회 
+    public List<RestAreaResponseDTO> findAll() {
+        System.out.println("[RestAreaService] findAll");
+
+        List<RestAreaEntity> list = restRepository.findAll();
+        return list.stream()
+                .map(entity -> RestAreaResponseDTO.fromEntity(entity))
+                .toList();
+    }
+
+    // ID 기반 휴게소 단건 조회 
+    public RestAreaResponseDTO findByRestAreaId(Integer restAreaId) {
+        System.out.println("[RestAreaService] findByRestAreaId : "+ restAreaId);
+
+        RestAreaEntity restAreaEntity =
+            restRepository.findById(restAreaId)
+                .orElseThrow(() -> 
+                    new RuntimeException("해당 휴게소가 존재하지 않습니다"));
+                  
+        RestAreaResponseDTO response = 
+            RestAreaResponseDTO.fromEntity(restAreaEntity) ;
+        return response ;
+          
+    }
+
+    // CODE 기반 휴게소 단건 조회 
+    public RestAreaResponseDTO findByCode(String code){
+        System.out.println("[RestAreaService] findByCode : "+ code);
+
+        Optional<RestAreaEntity> restAreaEntity = restRepository.findByCode(code);
+        
+        if(restAreaEntity.isPresent()) {
+            return RestAreaResponseDTO.fromEntity(restAreaEntity.get()) ;
+            
+        }
+        else {
+            return null;
+        }
+    }
+
+    //  휴게소 수정 로직
+    // (참고: 클래스 레벨이나 이 메서드에 @Transactional 어노테이션을 붙이면
+    //  save를 명시적으로 호출하지 않아도 DB에 반영됩니다 - "dirty checking")
+    public RestAreaResponseDTO update(Integer restAreaId, RestAreaRequestDTO request) {
+        System.out.println("[RestAreaService] update restAreaId : "+ restAreaId);
+        System.out.println("[RestAreaService] update : "+ request);
+
+       
+        RestAreaEntity existingEntity = restRepository.findById(restAreaId)
+                .orElseThrow(() -> 
+                    new RuntimeException("해당 휴게소가 존재하지 않습니다. ID: " + restAreaId));
+
+        
+        existingEntity.setName(request.getName());
+        existingEntity.setDirection(request.getDirection());
+        existingEntity.setCode(request.getCode());
+        existingEntity.setTel(request.getTel());
+        existingEntity.setAddress(request.getAddress());
+        existingEntity.setRouteName(request.getRouteName());
+        existingEntity.setXValue(request.getXValue()); // DTO에 있는 필드를 모두 반영
+        existingEntity.setYValue(request.getYValue()); // DTO에 있는 필드를 모두 반영
+
+        
+        RestAreaEntity savedEntity = restRepository.save(existingEntity);
+
+        return RestAreaResponseDTO.fromEntity(savedEntity);
+    }
+
+    // 휴게소 삭제 
+    public boolean delete(Integer restAreaId) {
+
+        RestAreaEntity entity = restRepository.findById(restAreaId)
+                .orElseThrow(() -> new RuntimeException("휴게소가 존재하지 않습니다. ID: " + restAreaId));
+
+        restRepository.deleteById(restAreaId);
+
+        return true;
+    }
+
+   
+    public List<RestAreaResponseDTO> findByDirection(String direction) {
+        
+
+        // (성능 향상)
+        List<RestAreaEntity> entities = restRepository.findByDirection(direction);
+
+        return entities.stream()
+                .map(entity -> RestAreaResponseDTO.fromEntity(entity))
+                .collect(Collectors.toList());
+    }
+
+    public RestAreaResponseDTO findByAddress(String addr) {
+        
+        Optional<RestAreaEntity> response = restRepository.findByAddress(addr);
+        
+        if(response.isPresent()) {
+            return RestAreaResponseDTO.fromEntity(response.get());
+        }
+        return null;
+    }
+            
+}

@@ -6,31 +6,35 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
-import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
+import com.mini.mini_2.facility.application.dto.FacilityRequestDTO;
+import com.mini.mini_2.facility.application.dto.FacilityResponseDTO;
 import com.mini.mini_2.facility.domain.entity.FacilityEntity;
-import com.mini.mini_2.facility.repository.FacilityRepository;
-import com.mini.mini_2.favorite.domain.dto.FavoriteRequestDTO;
-import com.mini.mini_2.favorite.domain.dto.FavoriteResponseDTO;
+import com.mini.mini_2.facility.domain.FacilityRepository;
+import com.mini.mini_2.favorite.application.dto.FavoriteRequestDTO;
+import com.mini.mini_2.favorite.application.dto.FavoriteResponseDTO;
 import com.mini.mini_2.favorite.domain.entity.FavoriteEntity;
-import com.mini.mini_2.favorite.repository.FavoriteRepository;
-import com.mini.mini_2.food.domain.dto.FoodRequestDTO;
-import com.mini.mini_2.food.domain.dto.FoodResponseDTO;
+import com.mini.mini_2.favorite.domain.FavoriteRepository;
+import com.mini.mini_2.food.application.dto.FoodRequestDTO;
+import com.mini.mini_2.food.application.dto.FoodResponseDTO;
+import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
-import com.mini.mini_2.food.repository.FoodRepository;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
-import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
-import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+import com.mini.mini_2.review.application.dto.ReviewRequestDTO;
+import com.mini.mini_2.review.application.dto.ReviewResponseDTO;
+import com.mini.mini_2.review.domain.ReviewRepository;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
-import com.mini.mini_2.review.repository.ReviewRepository;
-import com.mini.mini_2.user.domain.dto.UserRequestDTO;
-import com.mini.mini_2.user.domain.dto.UserResponseDTO;
+import com.mini.mini_2.user.application.dto.UserRequestDTO;
+import com.mini.mini_2.user.application.dto.UserResponseDTO;
 import com.mini.mini_2.user.domain.entity.UserEntity;
-import com.mini.mini_2.user.repository.UserRepository;
+import com.mini.mini_2.user.domain.UserRepository;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = "com.mini.mini_2") // 2. "com.mini.mini_2" 하위의 모든 @Entity 스캔
 
 @SpringBootTest
 @Transactional

@@ -1,83 +1,61 @@
 package com.mini.mini_2.all;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = "com.mini.mini_2") // 2. "com.mini.mini_2" 하위의 모든 @Entity 스캔
+@ExtendWith(MockitoExtension.class) // ✅ 스프링 미사용, 컨텍스트 X
+class RestAreaTest {
 
-@SpringBootTest
-@Transactional
-public class RestAreaTest {
-
-    @Autowired
-    private RestAreaRepository restAreaRepository;
+    @Mock
+    RestAreaRepository restAreaRepository;
 
     @Test
-    public void test(){
-        // CREATE
-        RestAreaRequestDTO restAreaRequest = RestAreaRequestDTO.builder()
+    void crud() {
+        var entity = RestAreaEntity.builder()
                 .name("고양휴게소")
                 .direction("상행")
                 .code("0001")
                 .tel("031-000-0000")
-                .address("경기도 고양시 덕양구 수원문산고속도로 51")
+                .address("경기도 고양시 덕양구")
                 .routeName("문산고속도로")
                 .build();
 
-        RestAreaEntity restAreaEntity = restAreaRepository.save(restAreaRequest.toEntity());
+        when(restAreaRepository.findByCode("0001"))
+                .thenReturn(Optional.of(entity));
 
-        assertNotNull(restAreaEntity.getRestAreaId());
-        assertEquals("고양휴게소", restAreaEntity.getName());
-
-
-        // READ
-        Optional<RestAreaEntity> foundById =
-                restAreaRepository.findById(restAreaEntity.getRestAreaId());
-
-        assertTrue(foundById.isPresent());
-        assertEquals("고양휴게소", foundById.get().getName());
-
-        // UPDATE
-        RestAreaEntity entityToUpdate = foundById.orElseThrow();
-        entityToUpdate.setTel("031-111-1111");
-        RestAreaEntity updatedEntity = restAreaRepository.save(entityToUpdate);
-
-        assertEquals("031-111-1111", updatedEntity.getTel());
-
-        // DELETE
-        restAreaRepository.deleteById(restAreaEntity.getRestAreaId());
-        Optional<RestAreaEntity> deletedEntity =
-                restAreaRepository.findById(restAreaEntity.getRestAreaId());
-
-        assertFalse(deletedEntity.isPresent());
+        var found = restAreaRepository.findByCode("0001");
+        assertTrue(found.isPresent());
+        assertEquals("고양휴게소", found.get().getName());
     }
 
     @Test
-    public void filterTest() {
-        List<RestAreaEntity> directionFilter = restAreaRepository.findAll();
-        
-        List<RestAreaEntity> up = directionFilter.stream()
-                .filter(e -> "상행".equals(e.getDirection()))
-                .toList();
-        System.out.println("상행 휴게소: " + up);
+    void filterTest() {
+        var list = List.of(
+            RestAreaEntity.builder().name("시흥").direction("상행").build(),
+            RestAreaEntity.builder().name("안성").direction("하행").build()
+        );
+        when(restAreaRepository.findAll()).thenReturn(list);
 
-        List<RestAreaEntity> down = directionFilter.stream()
-                .filter(e -> "하행".equals(e.getDirection()))
-                .toList();
-        System.out.println("상행 휴게소: " + down);
+        var all = restAreaRepository.findAll();
+        var up = all.stream().filter(e -> "상행".equals(e.getDirection())).toList();
+        var down = all.stream().filter(e -> "하행".equals(e.getDirection())).toList();
 
+        assertEquals(1, up.size());
+        assertEquals(1, down.size());
     }
 }

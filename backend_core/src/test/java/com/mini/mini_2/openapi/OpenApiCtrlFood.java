@@ -4,9 +4,10 @@ import com.mini.mini_2.auth.AuthInterceptor;
 import com.mini.mini_2.openapi.domain.dto.FoodApiResponseDTO;
 import com.mini.mini_2.openapi.service.FoodApiService;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
-import com.mini.mini_2.food.repository.FoodRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,7 +26,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = "com.mini.mini_2") // 2. "com.mini.mini_2" 하위의 모든 @Entity 스캔
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional

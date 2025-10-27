@@ -15,15 +15,20 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
-import com.mini.mini_2.review.domain.dto.ReviewRequestDTO;
-import com.mini.mini_2.review.domain.dto.ReviewResponseDTO;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+import com.mini.mini_2.review.application.ReviewService;
+import com.mini.mini_2.review.application.dto.ReviewRequestDTO;
+import com.mini.mini_2.review.application.dto.ReviewResponseDTO;
+import com.mini.mini_2.review.domain.ReviewRepository;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
-import com.mini.mini_2.review.repository.ReviewRepository;
-import com.mini.mini_2.review.service.ReviewService;
+import com.mini.mini_2.user.domain.UserRepository;
 import com.mini.mini_2.user.domain.entity.UserEntity;
-import com.mini.mini_2.user.repository.UserRepository;
 
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = "com.mini.mini_2") // 2. "com.mini.mini_2" 하위의 모든 @Entity 스캔
 
 @SpringBootTest
 @Transactional
