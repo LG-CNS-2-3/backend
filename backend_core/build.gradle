@@ -36,7 +36,7 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	
-	// invalidation
+	// validation
 	// ctrl 에서 dto를 파라미터로 받을 때 유효성 체크
 	implementation group: 'org.springframework.boot', name : 'spring-boot-starter-validation'
 	
@@ -57,19 +57,51 @@ dependencies {
 	// spring security (BCrypt 암호화용)
 	implementation 'org.springframework.security:spring-security-crypto'
 
+	// Spring Boot Starters
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Dev Tools
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Database Driver
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// Configuration Processor
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	
+	// Test Dependencies
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.mockito:mockito-core'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// [수정] main과 test의 sourceSets를 명시적으로 정의
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources'] 
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources'] 
+        }
+    }
 }
