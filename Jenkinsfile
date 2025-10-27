@@ -80,13 +80,18 @@ pipeline {
                             ]){
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
+
+
                                          docker pull ${DOCKER_USERNAME}/backend-map:latest
 
                                          docker stop backend-map-container || true
                                          docker rm backend-map-container || true
 
+                                         HOST_IP=\$(TOKEN=\$(curl -s -X PUT \\"http://169.254.169.254/latest/api/token\\" -H \\"X-aws-ec2-metadata-token-ttl-seconds: 21600\\") && curl -s -H \\"X-aws-ec2-metadata-token: \$TOKEN\\" http://169.254.169.254/latest/meta-data/local-ipv4); \
+
                                          docker run -d --name backend-map-container \
                                             -p 8080:8080 \
+                                            -e EUREKA_INSTANCE_IP_ADDRESS=${HOST_IP}
                                             -e TMAP_API_KEY=${TMAP_API_KEY} \
                                             -e EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL} \
                                             ${DOCKER_USERNAME}/backend-map:latest

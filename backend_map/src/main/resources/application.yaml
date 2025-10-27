@@ -35,7 +35,8 @@ tmap:
 
 eureka:
   instance:
-      prefer-ip-address: true
+    prefer-ip-address: true
+    ip-address: ${EUREKA_INSTANCE_IP_ADDRESS}
   client:
     register-with-eureka: true
     fetch-registry: true
