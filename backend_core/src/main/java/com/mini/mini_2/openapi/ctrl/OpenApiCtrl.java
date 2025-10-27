@@ -3,10 +3,10 @@ package com.mini.mini_2.openapi.ctrl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
-import com.mini.mini_2.facility.service.FacilityService;
-import com.mini.mini_2.food.domain.dto.FoodRequestDTO;
-import com.mini.mini_2.food.service.FoodService;
+import com.mini.mini_2.facility.application.dto.FacilityRequestDTO;
+import com.mini.mini_2.facility.application.FacilityService;
+import com.mini.mini_2.food.application.FoodService;
+import com.mini.mini_2.food.application.dto.FoodRequestDTO;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiRequestDTO;
 import com.mini.mini_2.openapi.domain.dto.FacilityApiResponseDTO;
 import com.mini.mini_2.openapi.domain.dto.FoodApiRequestDTO;
@@ -22,9 +22,9 @@ import com.mini.mini_2.openapi.service.FacilityApiService;
 import com.mini.mini_2.openapi.service.FoodApiService;
 import com.mini.mini_2.openapi.service.RestAreaInfoApiService;
 import com.mini.mini_2.openapi.service.RestAreaLocationApiService;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
-import com.mini.mini_2.rest_area.service.RestAreaService;
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.RestAreaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

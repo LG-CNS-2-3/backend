@@ -14,21 +14,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.boot.test.context.SpringBootTest; // SpringBootTest import 확인
 
-import com.mini.mini_2.facility.domain.dto.FacilityRequestDTO;
-import com.mini.mini_2.facility.domain.dto.FacilityResponseDTO;
-import com.mini.mini_2.facility.service.FacilityService;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaRequestDTO;
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
-import com.mini.mini_2.rest_area.repository.RestAreaRepository;
-import com.mini.mini_2.rest_area.service.RestAreaService;
+import com.mini.mini_2.facility.application.dto.FacilityRequestDTO;
+import com.mini.mini_2.facility.application.dto.FacilityResponseDTO;
+import com.mini.mini_2.facility.application.FacilityService;
+import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+import com.mini.mini_2.rest_area.application.RestAreaService;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-
-@SpringBootTest
+@ActiveProfiles("test")                       // 1. "application-test.yml"을 강제 사용
+@EntityScan(basePackages = { // 엔티티 스캔은 그대로 유지
+    "com.mini.mini_2.rest_area.domain.entity",
+    "com.mini.mini_2.facility.domain.entity",
+    "com.mini.mini_2.food.domain.entity",
+    "com.mini.mini_2.review.domain.entity",
+    "com.mini.mini_2.favorite.domain.entity",
+    "com.mini.mini_2.user.domain.entity"
+})
+@SpringBootTest(
+    // excludeFilters를 사용하여 특정 클래스를 컴포넌트 스캔에서 제외
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        classes = com.mini.mini_2.user.repository.UserRepository.class // 옛날 UserRepository 제외
+    )
+)
 @Transactional
 @Rollback
 public class FacilityTest {
+
+
+
 
     @Autowired 
     RestAreaRepository  restAreaRepository;

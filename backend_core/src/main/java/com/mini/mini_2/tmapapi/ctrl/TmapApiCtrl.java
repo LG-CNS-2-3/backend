@@ -2,7 +2,7 @@ package com.mini.mini_2.tmapapi.ctrl;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mini.mini_2.rest_area.domain.dto.RestAreaResponseDTO;
+import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.tmapapi.domain.dto.PoiRequestDTO;
 import com.mini.mini_2.tmapapi.domain.dto.PoiResponseDTO;
 import com.mini.mini_2.tmapapi.domain.dto.RoutePoiRequestDTO;
