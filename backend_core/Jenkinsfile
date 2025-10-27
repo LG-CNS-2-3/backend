@@ -77,29 +77,29 @@ pipeline {
                                     # 5. Bastion Host 경유를 위해 -J 옵션 추가
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
 
-                                    # 7. Jenkins Credential로 .env 파일 동적 생성
-                                    echo "Creating .env file..."
-                                    cat << 'EOF' > .env
-                                    EUREKA_SERVICE_URL=\${EUREKA_SERVICE_URL}
-                                    GATEWAY_URL=\${GATEWAY_URL}
-                                    EOF
+                                        # 6. Jenkins Credential로 .env 파일 동적 생성
+                                        echo "Creating .env file..."
+                                        cat << 'EOF' > .env
+                                        EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
+                                        GATEWAY_URL=${GATEWAY_URL}
+                                        'EOF'
 
-                                    # 8. 동적 IP 주소 가져오기
-                                    echo "Fetching EC2 private IP..."
-                                    export HOST_IP=\$(TOKEN=\$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-                                        -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
-                                        curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
-                                        http://169.254.169.254/latest/meta-data/local-ipv4)
+                                        # 7. 동적 IP 주소 가져오기
+                                        echo "Fetching EC2 private IP..."
+                                        export HOST_IP=\$(TOKEN=\$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+                                            -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
+                                            curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
+                                            http://169.254.169.254/latest/meta-data/local-ipv4)
 
-                                    # 9. 새 이미지 pull
-                                    echo "Pulling latest Docker image (backend-core)..."
-                                    docker pull ${DOCKER_USERNAME}/backend-core:latest
+                                        # 8. 새 이미지 pull
+                                        echo "Pulling latest Docker image (backend-core)..."
+                                        docker pull ${DOCKER_USERNAME}/backend-core:latest
 
-                                    # 10. 컨테이너 재시작
-                                    echo "Running docker-compose up (backend-core)..."
-                                    docker-compose up -d
+                                        # 9. 컨테이너 재시작
+                                        echo "Running docker-compose up (backend-core)..."
+                                        docker-compose up -d
 
-                                    docker image prune -f
+                                        docker image prune -f
                                     '''
                                 """
                             }
