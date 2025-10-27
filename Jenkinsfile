@@ -6,6 +6,11 @@ pipeline {
         jdk 'openJDK17'
     }
 
+    environment{
+        DOCKERHUB_USERNAME = "khw73850"
+        EC2_HOST = ubuntu@10.0.0.20
+    }
+
     stages{
         stage('Checkout') {
             steps {
@@ -72,6 +77,26 @@ pipeline {
                                    docker logout
                                 """
                             }
+                        }
+                    }
+                }
+
+                stage('map: Deploy'){
+                    steps{
+                        echo "==================== Deploying to EC2 (backend-map) ===================="
+                        sshagent(credentials: ['EC2_SSH_CREDENTIALS']){
+                            sh """
+                                ssh -o StrictHostKeyChecking=no ${EC2_HOST}'''
+                                     docker pull ${DOCKER_USERNAME}/backend-map:latest
+
+                                     docker stop backend_map-container || true
+                                     docker rm backend_map-container || true
+
+                                     docker run -d --name backend_map-container -p 8080:8080 ${DOCKER_USERNAME}/backend_map:latest
+
+                                     docker image prune -f
+                                '''
+                            """
                         }
                     }
                 }
