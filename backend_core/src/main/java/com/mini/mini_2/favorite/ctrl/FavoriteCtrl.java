@@ -25,9 +25,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/mini/favorite")
-@Tag(name = "Favorite API", description = "즐겨찾기 API")
+@Tag(name = "Favorite API (Deprecated)", description = "⚠️ DEPRECATED: /api/v1/members/{memberId}/favorites 사용 권장")
 public class FavoriteCtrl {
     
     @Autowired

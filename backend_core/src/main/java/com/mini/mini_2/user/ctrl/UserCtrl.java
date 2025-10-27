@@ -26,9 +26,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/mini/user")
-@Tag(name = "User API", description = "회원 API")
+@Tag(name = "User API (Deprecated)", description = "⚠️ DEPRECATED: /api/v1/members 사용 권장")
 public class UserCtrl {
     
     @Autowired
