@@ -28,7 +28,7 @@ public class SecurityConfig {
                                 "/api/v1/mini/**"
                         ).permitAll()
                         .anyRequest().authenticated()
-                ).build();
+                );
         return http.build();
     }
 }
