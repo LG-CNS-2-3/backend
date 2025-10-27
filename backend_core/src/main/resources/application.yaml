@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mini_2
+    name: backend-core
 
   # maria db    
   datasource:
