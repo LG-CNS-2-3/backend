@@ -10,17 +10,43 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
+    private static final String ALLOWED_HEADERS = "authorization, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN, refreshtoken, RefreshToken";
+    private static final String ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS, PATCH";
+    private static final String EXPOSE_HEADERS = "*, Authorization";
+    private static final String MAX_AGE = "7200"; //2 hours (2 * 60 * 60)
+
     @Bean
+    public WebFilter corsFilter(){
+        return (ServerWebExchange ctx, WebFilterChain chain) -> {
+            ServerHttpRequest request = ctx.getRequest();
+
+            String origin = request.getHeaders().getOrigin();
+
+            if(CorsUtils.isCorsRequest(request)){
+                ServerHttpResponse response = ctx.getResponse();
+                HttpHeaders headers = response.getHeaders();
+
+                if(origin.startsWith("http://localhost:3000")){
+                    headers.add("Access-Control-Allow-Origin", origin);
+                }
+
+                headers.add("Access-Control-Methods", ALLOWED_METHODS);
+                headers.add("Access-Control-Max-Age", MAX_AGE);
+                headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+                headers.add("Access-Control-Expose-Headers",  EXPOSE_HEADERS);
+                headers.setAccessControlAllowCredentials(true);
+                if (request.getMethod() == HttpMethod.OPTIONS) {
+                    response.setStatusCode(HttpStatus.OK);
+                    return Mono.empty();
+                }
+            }
+            return chain.filter(ctx);
+        };
+    }
+//    @Bean
     public CorsWebFilter corsWebFilter(){
         CorsConfiguration config = new CorsConfiguration();
-
-//        config.setAllowedOriginPatterns(List.of(
-//                "http://44.238.184.165:80",  // 운영 서버 (예시)
-//                "http://localhost:80",       // 로컬 80
-//                "http://localhost"
-//        ));
-
-        config.addAllowedOrigin("http://localhost:3000");
+        config.setAllowedOrigins(List.of("http://localhost:3000", "http://44.238.184.165:80"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);

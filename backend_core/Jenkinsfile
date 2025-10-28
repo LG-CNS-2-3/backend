@@ -79,6 +79,7 @@ pipeline {
                                 // 3. .env 파일로 생성할 Credential 목록
                                 string(credentialsId: 'EUREKA_SERVICE_URL', variable: 'EUREKA_SERVICE_URL'),
                                 string(credentialsId: 'GATEWAY_URL', variable: 'GATEWAY_URL'),
+                                string(credentialsId: 'OPENAPI_KEY', variable: 'OPENAPI_KEY')
                             ]) {
                                 sh """
                                     ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
@@ -92,7 +93,7 @@ pipeline {
                                                                 echo "EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}" > .env
                                                                 echo "GATEWAY_URL=${GATEWAY_URL}" >> .env
                                                                 echo "HOST_IP=\${HOST_IP}" >> .env
-
+                                                                echo "OPENAPI_KEY=\${OPENAPI_KEY}" >> .env
                                                                 echo ".env file created:"
                                                                 cat .env
 
