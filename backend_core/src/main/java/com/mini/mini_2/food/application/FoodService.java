@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.mini.mini_2.exception.RestAreaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mini.mini_2.food.application.dto.FoodRequestDTO;
 import com.mini.mini_2.food.application.dto.FoodResponseDTO;
@@ -15,6 +16,9 @@ import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
+
+import com.mini.mini_2.exception.FoodNotFoundException;
+import com.mini.mini_2.exception.RestAreaNotFoundException;
 
 @Service
 public class FoodService {
@@ -47,36 +51,59 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
-    // 일부 조회
-    public FoodResponseDTO findByFoodId(Integer foodId) {
-        return foodRepository.findById(foodId)
-                .map(FoodResponseDTO::fromEntity)
-                .orElse(null);
+    // food id 기반 조회
+public FoodResponseDTO findByFoodId(Integer foodId) {
+        System.out.println("[FoodService] findByFoodId: " + foodId);
+        // [수정] orElseThrow로 예외 처리 후 바로 DTO 변환 (코드 간결화)
+        FoodEntity foodEntity = foodRepository.findById(foodId)
+                .orElseThrow(() -> new FoodNotFoundException(foodId));
+        return FoodResponseDTO.fromEntity(foodEntity); // 찾은 엔티티를 DTO로 변환하여 반환
     }
 
     // 메뉴 수정
     public FoodResponseDTO update(Integer foodId, FoodRequestDTO request) {
 
-        Optional<FoodEntity> foodEntity = foodRepository.findById(foodId);
+        System.out.println("[FoodService] update foodId: " + foodId + ", request: " + request);
+        // [수정] orElseThrow 사용하여 수정할 음식이 없을 경우 FoodNotFoundException 발생
+        FoodEntity entity = foodRepository.findById(foodId)
+                 .orElseThrow(() -> new FoodNotFoundException(foodId));
+    
 
         // RestAreaEntity fixedRestArea = existing.getRestArea();
 
-        FoodEntity entity = foodEntity.get();
-        entity.setFoodName(request.getFoodName());
-        entity.setIsSignature(request.getIsSignature());
-        entity.setPrice(request.getPrice());
-        entity.setDescription(request.getDescription());
+        boolean changed = false;
+        if (request.getFoodName() != null && !request.getFoodName().isBlank()) {
+            entity.setFoodName(request.getFoodName());
+            changed = true;
+        }
+        if (request.getPrice() != null && !request.getPrice().isBlank()) {
+            entity.setPrice(request.getPrice());
+            changed = true;
+        }
+        if (request.getIsSignature() != null && !request.getIsSignature().isBlank()) {
+            entity.setIsSignature(request.getIsSignature());
+            changed = true;
+        }
+        if (request.getDescription() != null) { // 설명은 비어있을 수 있다고 가정
+            entity.setDescription(request.getDescription());
+            changed = true;
+        }
 
-        FoodEntity saved = foodRepository.save(entity);
+        // 변경된 경우에만 저장 (선택적 최적화)
+        FoodEntity saved = entity; // 기본값
+        if (changed) {
+            saved = foodRepository.save(entity);
+        }
 
         return FoodResponseDTO.fromEntity(saved);
     }
 
     // 메뉴 삭제
+    @Transactional
     public boolean delete(Integer foodId) {
 
         FoodEntity entity = foodRepository.findById(foodId)
-                .orElseThrow(() -> new RuntimeException("음식이 존재하지 않습니다. ID: " + foodId));
+                .orElseThrow(() -> new FoodNotFoundException(foodId));
 
         foodRepository.delete(entity);
 
@@ -85,7 +112,7 @@ public class FoodService {
 
     // [수정] 메뉴 필터를 통한 음식 조회 (DB에서 직접 필터링)
     public List<FoodResponseDTO> searchByName(String keyword) {
-        // [수정] findAll() 대신 쿼리 메서드 사용
+        System.out.println("[FoodService] searchByName: " + keyword);
         List<FoodEntity> entities = foodRepository.findByFoodNameContaining(keyword);
 
         return entities.stream()
@@ -106,6 +133,7 @@ public class FoodService {
     // [수정] 가격 필터를 통한 음식 조회 (DB에서 직접 필터링)
     public List<FoodResponseDTO> searchByPrice(double maxPrice) {
         // [수정] findAll() 대신 쿼리 메서드 사용
+        System.out.println("[FoodService] searchByPrice <= " + maxPrice);
         List<FoodEntity> entities = foodRepository.findByPriceLessThanEqual(maxPrice);
 
         return entities.stream()
