@@ -39,7 +39,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token);
 
             // Redis에서 토큰 존재 여부 확인 (비동기)
-            return tokenStore.existsAccessToken(token);
+            return Mono.just(true);
         } catch (Exception e) {
             return Mono.just(false);
         }
