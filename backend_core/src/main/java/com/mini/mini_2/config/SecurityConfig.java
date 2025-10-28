@@ -25,7 +25,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/members/login",
                                 "/api/v1/members/register",
-                                "/api/v1/mini/**"
+                                "/api/v1/mini/**",
+                                "/api/v1/members/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

@@ -50,3 +50,7 @@ dist/
 .gradle
 
 ./src/main/resources/application-local.yaml
+
+# Gradle
+.gradle/
+build/
