@@ -10,7 +10,7 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
-    @Bean
+//    @Bean
     public CorsWebFilter corsWebFilter(){
         CorsConfiguration config = new CorsConfiguration();
 
@@ -34,7 +34,6 @@ public class CorsConfig {
 //        config.setAllowedMethods(List.of(
 //                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
 //        ));
-
 
         return new CorsWebFilter(source);
     }
