@@ -7,20 +7,15 @@ import com.mini.mini_2.facility.domain.entity.FacilityEntity;
 import com.mini.mini_2.member.domain.Favorite;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.review.domain.entity.ReviewEntity;
-import com.mini.mini_2.rest_area.domain.enums.RestDirection;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,10 +42,8 @@ public class RestAreaEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RestDirection direction;
-
+    @Column(nullable = false, length = 50)
+    private String direction;
 
     @Column(nullable = false, unique = true, length = 100)
     private String code;

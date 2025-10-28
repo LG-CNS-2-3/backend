@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
-import com.mini.mini_2.rest_area.domain.enums.RestDirection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +20,7 @@ public class RestAreaRepositoryAdapter implements RestAreaRepository {
     @Override public Optional<RestAreaEntity> findById(Integer id) { return jpa.findById(id); }
     @Override public Optional<RestAreaEntity> findByCode(String code) { return jpa.findByCode(code); }
     @Override public List<RestAreaEntity> findAll() { return jpa.findAll(); }
-    @Override public List<RestAreaEntity> findByDirection(RestDirection direction) { return jpa.findByDirection(direction); }
+    @Override public List<RestAreaEntity> findByDirection(String direction) { return jpa.findByDirection(direction); }
     @Override public void deleteById(Integer id) { jpa.deleteById(id); }
 
     @Override public Optional<RestAreaEntity> findByAddress(String addr) {return jpa.findByAddress(addr);}
