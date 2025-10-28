@@ -14,8 +14,8 @@ public class RestAreaInfoApiService {
     private final String appKey;
 
     public RestAreaInfoApiService(WebClient.Builder builder,
-            @Value("${OPENAPI_KEY}") String appKey,
-            @Value("${OPENAPI_INFO_URL}") String openApiRestAreaUrl) {
+            @Value("${openapi.key}") String appKey,
+            @Value("${openapi.info-url}") String openApiRestAreaUrl) {
         this.appKey = appKey;
         this.openApiRestAreaInfoUrl = openApiRestAreaUrl;
         this.restAreaInfoWebClient = builder

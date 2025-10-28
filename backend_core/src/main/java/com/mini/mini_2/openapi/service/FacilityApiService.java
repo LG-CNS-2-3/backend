@@ -14,8 +14,8 @@ public class FacilityApiService {
     private final String appKey;
     
     public FacilityApiService(WebClient.Builder builder,
-                        @Value("${OPENAPI_KEY}") String appKey,
-                        @Value("${OPENAPI_FACILITY_URL}") String openApiFacilityUrl) {
+                        @Value("${openapi.key}") String appKey,
+                        @Value("${openapi.facility-url}") String openApiFacilityUrl) {
         this.appKey = appKey;
         this.openApiFacilityUrl = openApiFacilityUrl;
         this.facilityWebClient = builder

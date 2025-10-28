@@ -14,8 +14,8 @@ public class FoodApiService {
     private final String appKey;
     
     public FoodApiService(WebClient.Builder builder,
-                        @Value("${OPENAPI_KEY}") String appKey,
-                        @Value("${OPENAPI_FOOD_URL}") String openApiFoodUrl) {
+                        @Value("${openapi.key}") String appKey,
+                        @Value("${openapi.food-url}") String openApiFoodUrl) {
         this.appKey = appKey;
         this.openApiFoodUrl = openApiFoodUrl;
         this.foodWebClient = builder
