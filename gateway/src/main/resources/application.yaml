@@ -56,4 +56,3 @@ springdoc:
         url: /api/v1/backend-map/v3/api-docs
       - name: backend-core
         url: /api/v1/backend-core/v3/api-docs
-

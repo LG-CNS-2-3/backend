@@ -49,7 +49,6 @@ openai:
   url: ${OPEN_AI_URL}
   model: ${OPEN_AI_MODEL}
 
-
 eureka:
   instance:
     prefer-ip-address: true
