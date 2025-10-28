@@ -67,8 +67,6 @@ eureka:
     service-url:
       defaultZone: http://${EUREKA_SERVICE_URL}/eureka
 
-openapi:
-  key: ${OPENAPI_KEY}
 
 springdoc:
   api-docs:
