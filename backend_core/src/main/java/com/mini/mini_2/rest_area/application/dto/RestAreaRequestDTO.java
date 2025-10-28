@@ -29,7 +29,7 @@ public class RestAreaRequestDTO {
     public RestAreaEntity toEntity() {
         return RestAreaEntity.builder()
                              .name(this.name)
-                             .direction(this.direction)
+                             .direction(this.direction.toLowerCase())
                              .code(this.code)
                              .tel(this.tel)
                              .address(this.address)

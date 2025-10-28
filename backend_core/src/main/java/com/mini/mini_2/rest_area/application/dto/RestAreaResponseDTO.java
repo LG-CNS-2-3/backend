@@ -33,7 +33,7 @@ public class RestAreaResponseDTO {
         return RestAreaResponseDTO.builder()
                                   .restAreaId(entity.getRestAreaId())
                                   .name(entity.getName())
-                                  .direction(entity.getDirection())
+                                  .direction(entity.getDirection().getKorName())
                                   .code(entity.getCode())
                                   .tel(entity.getTel())
                                   .address(entity.getAddress())
