@@ -47,4 +47,6 @@ Thumbs.db
 node_modules/
 dist/
 
-/.gradle
+.gradle
+
+./src/main/resources/application-local.yaml
