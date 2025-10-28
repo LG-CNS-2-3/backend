@@ -34,7 +34,7 @@ public class ReviewService {
     public ReviewResponseDTO create(ReviewRequestDTO request) {
         System.out.println("[ReviewService] create : "+ request);
 
-        Optional<Member> member = memberRepository.findById(Long.valueOf(request.getMemberId()));
+        Optional<Member> member = memberRepository.findById(Long.valueOf(request.getUserId()));
         Optional<RestAreaEntity> restAreaEntity = restAreaRepository.findById(request.getRestAreaId());
 
 
@@ -56,9 +56,9 @@ public class ReviewService {
     }
     
     // ID 기반 회원 리뷰 조회
-    public List<ReviewResponseDTO> findByMemberId(Integer memberId) {
+    public List<ReviewResponseDTO> findByUserId(Integer userId) {
 
-        List<ReviewEntity> responses = reviewRepository.findByMember_Id(Long.valueOf(memberId));
+        List<ReviewEntity> responses = reviewRepository.findByMember_Id(Long.valueOf(userId));
 
         return responses.stream()
                 .map(entity -> ReviewResponseDTO.fromEntity(entity))
