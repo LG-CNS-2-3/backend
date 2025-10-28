@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.mini.mini_2.exception.RestAreaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +37,12 @@ public class FacilityService {
     public FacilityResponseDTO create(FacilityRequestDTO request) {
         System.out.println("[FacilityService] create : "+ request);
 
-        Optional<RestAreaEntity> restArea = restAreaRepository.findById(request.getRestAreaId());
+        RestAreaEntity restArea = restAreaRepository.findById(request.getRestAreaId()).orElseThrow(
+                () -> new RestAreaNotFoundException(request.getRestAreaId())
+        );
 
-        if(restArea.isPresent()) {
-
-            FacilityEntity facility = request.toEntity(restArea.get());
-            return FacilityResponseDTO.fromEntity(facilityRepository.save(facility));
-        }
-        else {
-            return null;
-        }
+        FacilityEntity facility = request.toEntity(restArea);
+        return FacilityResponseDTO.fromEntity(facilityRepository.save(facility));
     }
     
     // 휴게소 ID 기반 편의시설 조회
@@ -62,7 +59,6 @@ public class FacilityService {
     // 원하는 편의시설이 있는 휴게소 조회
     public List<RestAreaResponseDTO> searchByNames(List<String> names) {
 
-        
         List<String> cleandNames = (names == null ? List.<String>of() : names)
                 .stream()
                 .filter(Objects::nonNull)
@@ -76,6 +72,4 @@ public class FacilityService {
                 .map(RestAreaResponseDTO::fromEntity)
                 .toList() ;
     }
-  
-    
 }

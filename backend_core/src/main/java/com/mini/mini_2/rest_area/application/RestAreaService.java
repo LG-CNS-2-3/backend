@@ -131,7 +131,7 @@ public class RestAreaService {
         
 
         // (성능 향상)
-        List<RestAreaEntity> entities = restRepository.findByDirection(direction);
+        List<RestAreaEntity> entities = restRepository.findByDirection(direction.toLowerCase());
 
         return entities.stream()
                 .map(entity -> RestAreaResponseDTO.fromEntity(entity))

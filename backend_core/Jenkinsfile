@@ -9,10 +9,16 @@ pipeline {
     environment{
         DOCKER_USERNAME = "khw73850"
         EC2_HOST = "ubuntu@10.0.0.24" // backend-core 서버 IP
-        BASTION_HOST = "ubuntu@52.11.248.251" // 경유지 (Bastion 서버 Public IP)
     }
 
     stages{
+
+        stage('Clean Workspace') {
+            steps {
+                echo " Cleaning workspace before build... (deleteDir)"
+                deleteDir()   
+            }
+        }
         stage('Checkout') {
             steps {
                 echo "Checking out source..."
@@ -75,37 +81,26 @@ pipeline {
                                 string(credentialsId: 'GATEWAY_URL', variable: 'GATEWAY_URL'),
                             ]) {
                                 sh """
-                                    # 5. Bastion Host 경유를 위해 -J 옵션 추가
-                                    ssh -o StrictHostKeyChecking=no -J ${BASTION_HOST} ${EC2_HOST} '''
-                                        
-                                        # 6. core용 docker-compose.yaml이 있는 디렉터리로 이동
-                                        APP_DIR="/home/ubuntu/app/backend-core"
-                                        cd $APP_DIR
-
-                                        # 7. Jenkins Credential로 .env 파일 동적 생성
-                                        echo "Creating .env file..."
-                                        cat << EOF > .env
-                                        EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}
-                                        GATEWAY_URL=${GATEWAY_URL}
-                                        # SPRING_URL=${SPRING_URL}
-                                        # REDIS_HOST=${REDIS_HOST}
-                                        # JWT_SECRET_KEY=${JWT_SECRET_KEY}
-                                        EOF
-
-                                        # 8. 동적 IP 주소 가져오기
+                                    ssh -o StrictHostKeyChecking=no ${EC2_HOST} '''
                                         echo "Fetching EC2 private IP..."
                                         export HOST_IP=\$(TOKEN=\$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
                                             -H "X-aws-ec2-metadata-token-ttl-seconds: 21600") && \
                                             curl -s -H "X-aws-ec2-metadata-token: \$TOKEN" \
                                             http://169.254.169.254/latest/meta-data/local-ipv4)
 
-                                        # 9. 새 이미지 pull
-                                        echo "Pulling latest Docker image (backend-core)..."
-                                        docker-compose pull
+                                        echo "Creating .env file..."
+                                                                echo "EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}" > .env
+                                                                echo "GATEWAY_URL=${GATEWAY_URL}" >> .env
+                                                                echo "HOST_IP=\${HOST_IP}" >> .env
 
-                                        # 10. 컨테이너 재시작
+                                                                echo ".env file created:"
+                                                                cat .env
+
+                                        echo "Pulling latest Docker image (backend-core)..."
+                                        docker pull ${DOCKER_USERNAME}/backend-core:latest
+
                                         echo "Running docker-compose up (backend-core)..."
-                                        docker-compose up -d
+                                        docker compose up -d
 
                                         docker image prune -f
                                     '''

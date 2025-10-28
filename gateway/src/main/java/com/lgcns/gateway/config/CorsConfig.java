@@ -1,4 +1,4 @@
-package main.java.com.lgcns.gateway.config;
+package com.lgcns.gateway.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
