@@ -2,7 +2,6 @@ package com.mini.mini_2.config;
 
 import com.mini.mini_2.auth.UserIdInterceptor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,13 +19,13 @@ public class WebConfig implements WebMvcConfigurer {
         this.userIdInterceptor = userIdInterceptor;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("*")
-                .allowCredentials(true);
-    }
+    // @Override
+    // public void addCorsMappings(CorsRegistry registry) {
+    //     registry.addMapping("/**")
+    //             .allowedOriginPatterns("*")
+    //             .allowedMethods("*")
+    //             .allowCredentials(true);
+    // }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
