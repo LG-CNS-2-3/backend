@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import java.util.stream.Collectors;
 
+import com.mini.mini_2.exception.RestAreaNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,6 @@ import com.mini.mini_2.food.domain.FoodRepository;
 import com.mini.mini_2.food.domain.entity.FoodEntity;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
 import com.mini.mini_2.rest_area.domain.RestAreaRepository;
-
-
 
 @Service
 public class FoodService {
@@ -30,8 +29,9 @@ public class FoodService {
     public FoodResponseDTO create(FoodRequestDTO request) {
         System.out.println("[FoodService] create : " + request); 
 
-        RestAreaEntity restAreaEntity = restAreaRepository.findById(request.getRestAreaId()).get();
-        
+        RestAreaEntity restAreaEntity = restAreaRepository.findById(request.getRestAreaId())
+                .orElseThrow(() -> new RestAreaNotFoundException(request.getRestAreaId()));
+
         FoodEntity foodEntity = request.toEntity(restAreaEntity);
 
         foodRepository.save(foodEntity);
