@@ -12,6 +12,8 @@ public class CorsConfig {
     @Bean
     public CorsWebFilter corsWebFilter(){
         CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOriginPattern("http://localhost:3000");
+        config.addAllowedOriginPattern("http://localhost");
         config.addAllowedOriginPattern("http://44.238.184.165:80");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
