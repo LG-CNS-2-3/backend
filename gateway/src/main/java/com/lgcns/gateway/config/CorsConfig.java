@@ -10,7 +10,7 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
-//    @Bean
+    @Bean
     public CorsWebFilter corsWebFilter(){
         CorsConfiguration config = new CorsConfiguration();
 
@@ -20,7 +20,7 @@ public class CorsConfig {
 //                "http://localhost"
 //        ));
 
-        config.addAllowedOriginPattern("*");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
