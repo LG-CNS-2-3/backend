@@ -78,7 +78,7 @@ public class RestAreaService {
         System.out.println("[RestAreaService] findByCode : "+ code);
 
         RestAreaEntity restAreaEntity = restRepository.findByCode(code)
-            .orElseThrow(() -> new RestAreaNotFoundException("code: " + code)); // 😊
+            .orElseThrow(() -> new RestAreaNotFoundException("code: " + code));
     // (참고: RestAreaNotFoundException에 String을 받는 생성자가 없다면, 
     //  ID 기반으로 예외를 통일하거나 생성자를 추가해야 합니다.)
 
