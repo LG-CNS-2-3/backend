@@ -49,6 +49,14 @@ openai:
   url: ${OPEN_AI_URL}
   model: ${OPEN_AI_MODEL}
 
+openapi:
+  key: ${OPENAPI_KEY}   # 👉 환경변수로 따로 관리 (보안용)
+  food-url: https://data.ex.co.kr/openapi/restinfo/restBestfoodList
+  facility-url: https://data.ex.co.kr/openapi/restinfo/restConvList
+  location-url: https://data.ex.co.kr/openapi/locationinfo/locationinfoRest
+  info-url: https://data.ex.co.kr/openapi/restinfo/hiwaySvarInfoList
+  brand-url: https://data.ex.co.kr/openapi/restinfo/restBrandList
+
 eureka:
   instance:
     prefer-ip-address: true
