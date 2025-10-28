@@ -87,11 +87,11 @@ public class ReviewCtrl {
         description = "회원 ID를 입력해주세요."
     )
 
-    @GetMapping("/lists/member/{MemberId}")
-    public ResponseEntity<List<ReviewResponseDTO>> findByUserId(@PathVariable("userId") Integer memberId) {
-        System.out.println("[ReviewCtrl] reviewsByMemberId : " + memberId);
+    @GetMapping("/lists/user/{userId}")
+    public ResponseEntity<List<ReviewResponseDTO>> findByUserId(@PathVariable("userId") Integer userId) {
+        System.out.println("[ReviewCtrl] reviewsByUserId : " + userId);
         
-        List<ReviewResponseDTO> responses = reviewService.findByMemberId(memberId);
+        List<ReviewResponseDTO> responses = reviewService.findByUserId(userId);
         
         if (responses != null) {
             return ResponseEntity.status(HttpStatus.OK).body(responses);
