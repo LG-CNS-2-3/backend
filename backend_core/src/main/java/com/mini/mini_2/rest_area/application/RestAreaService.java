@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional; 업데이트 시 @Transactional 사용 가능
 
+import com.mini.mini_2.exception.RestAreaNotFoundException;
 import com.mini.mini_2.rest_area.application.dto.RestAreaRequestDTO;
 import com.mini.mini_2.rest_area.application.dto.RestAreaResponseDTO;
 import com.mini.mini_2.rest_area.domain.entity.RestAreaEntity;
@@ -64,7 +65,7 @@ public class RestAreaService {
         RestAreaEntity restAreaEntity =
             restRepository.findById(restAreaId)
                 .orElseThrow(() -> 
-                    new RuntimeException("해당 휴게소가 존재하지 않습니다"));
+                    new RestAreaNotFoundException(restAreaId));
                   
         RestAreaResponseDTO response = 
             RestAreaResponseDTO.fromEntity(restAreaEntity) ;
@@ -76,15 +77,12 @@ public class RestAreaService {
     public RestAreaResponseDTO findByCode(String code){
         System.out.println("[RestAreaService] findByCode : "+ code);
 
-        Optional<RestAreaEntity> restAreaEntity = restRepository.findByCode(code);
-        
-        if(restAreaEntity.isPresent()) {
-            return RestAreaResponseDTO.fromEntity(restAreaEntity.get()) ;
-            
-        }
-        else {
-            return null;
-        }
+        RestAreaEntity restAreaEntity = restRepository.findByCode(code)
+            .orElseThrow(() -> new RestAreaNotFoundException("code: " + code)); // 😊
+    // (참고: RestAreaNotFoundException에 String을 받는 생성자가 없다면, 
+    //  ID 기반으로 예외를 통일하거나 생성자를 추가해야 합니다.)
+
+    return RestAreaResponseDTO.fromEntity(restAreaEntity);
     }
 
     //  휴게소 수정 로직
@@ -97,7 +95,7 @@ public class RestAreaService {
        
         RestAreaEntity existingEntity = restRepository.findById(restAreaId)
                 .orElseThrow(() -> 
-                    new RuntimeException("해당 휴게소가 존재하지 않습니다. ID: " + restAreaId));
+                    new RestAreaNotFoundException(restAreaId));
 
         
         existingEntity.setName(request.getName());
@@ -119,7 +117,7 @@ public class RestAreaService {
     public boolean delete(Integer restAreaId) {
 
         RestAreaEntity entity = restRepository.findById(restAreaId)
-                .orElseThrow(() -> new RuntimeException("휴게소가 존재하지 않습니다. ID: " + restAreaId));
+                .orElseThrow(() -> new RestAreaNotFoundException(restAreaId));
 
         restRepository.deleteById(restAreaId);
 
@@ -139,13 +137,11 @@ public class RestAreaService {
     }
 
     public RestAreaResponseDTO findByAddress(String addr) {
-        
-        Optional<RestAreaEntity> response = restRepository.findByAddress(addr);
-        
-        if(response.isPresent()) {
-            return RestAreaResponseDTO.fromEntity(response.get());
-        }
-        return null;
+
+    RestAreaEntity entity = restRepository.findByAddress(addr)
+            .orElseThrow(() -> new RestAreaNotFoundException("address: " + addr)); 
+
+    return RestAreaResponseDTO.fromEntity(entity);
     }
             
 }

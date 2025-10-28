@@ -48,6 +48,11 @@ public class FacilityService {
     // 휴게소 ID 기반 편의시설 조회
     public List<FacilityResponseDTO> findByRestAreaId(Integer restAreaId) {
         
+
+
+        restAreaRepository.findById(restAreaId)
+                .orElseThrow(() -> new RestAreaNotFoundException(restAreaId));
+
         List<FacilityEntity> entities = facilityRepository.findByRestArea_RestAreaId(restAreaId);
         
         return entities.stream()
