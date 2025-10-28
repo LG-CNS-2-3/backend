@@ -46,3 +46,7 @@ Thumbs.db
 node_modules/
 dist/
 /backend_core/.gradle/
+
+# Gradle
+.gradle/
+build/
