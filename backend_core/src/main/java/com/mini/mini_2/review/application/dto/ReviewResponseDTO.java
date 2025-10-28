@@ -18,7 +18,7 @@ import lombok.ToString;
 public class ReviewResponseDTO {
     private Integer reviewId;
 
-    private Integer userId;
+    private Integer memberId;
     private Integer restAreaId;
 
     private String rating;
@@ -27,7 +27,7 @@ public class ReviewResponseDTO {
     public static ReviewResponseDTO fromEntity(ReviewEntity entity) {
         return ReviewResponseDTO.builder()
                                 .reviewId(entity.getReviewId())
-                                .userId(entity.getMember().getId().intValue())
+                                .memberId(entity.getMember().getId().intValue())
                                 .restAreaId(entity.getRestArea().getRestAreaId())
                                 .rating(entity.getRating())
                                 .comment(entity.getComment())

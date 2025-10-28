@@ -21,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ReviewRequestDTO {
-    @Schema(example = "1", description = "사용자 Id") private Integer userId;
+    @Schema(example = "1", description = "사용자 Id") private Integer memberId;
     @Schema(example = "2", description = "휴게소 Id") private Integer restAreaId;
     
     @Schema(example = "4", description = "1 ~ 5 사이의 평점 입력") private String rating;
