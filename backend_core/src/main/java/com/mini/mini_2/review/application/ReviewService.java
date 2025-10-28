@@ -34,7 +34,7 @@ public class ReviewService {
     public ReviewResponseDTO create(ReviewRequestDTO request) {
         System.out.println("[ReviewService] create : "+ request);
 
-        Optional<Member> member = memberRepository.findById(Long.valueOf(request.getUserId()));
+        Optional<Member> member = memberRepository.findById(Long.valueOf(request.getMemberId()));
         Optional<RestAreaEntity> restAreaEntity = restAreaRepository.findById(request.getRestAreaId());
 
 
