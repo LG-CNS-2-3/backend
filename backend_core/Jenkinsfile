@@ -93,7 +93,7 @@ pipeline {
                                                                 echo "EUREKA_SERVICE_URL=${EUREKA_SERVICE_URL}" > .env
                                                                 echo "GATEWAY_URL=${GATEWAY_URL}" >> .env
                                                                 echo "HOST_IP=\${HOST_IP}" >> .env
-                                                                echo "OPENAPI_KEY=\${OPENAPI_KEY}" >> .env
+                                                                echo "OPENAPI_KEY=${OPENAPI_KEY}" >> .env
                                                                 echo ".env file created:"
                                                                 cat .env
 
