@@ -36,7 +36,10 @@ spring:
                 - Path=/api/v1/backend-core/**
               filters:
                 - RewritePath=/api/v1/backend-core/(?<segment>.*), /api/v1/${segment}
-
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 eureka:
   instance:

@@ -24,7 +24,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationGlobalFilter implements GlobalFilter, Ordered {
-
     private final JwtTokenProvider jwtTokenProvider;
 
     private static final List<String> EXCLUDE_PATHS = Arrays.asList(

@@ -1,5 +1,6 @@
-package main.java.com.lgcns.gateway.security;
+package com.lgcns.gateway.security;
 
+import com.lgcns.gateway.security.RedisTokenStore;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
